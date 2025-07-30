@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { fetchBanners } from "@/store/admin/banner-slice";
 import BannerUploadForm from "@/components/admin/bannerUploadForm";
-import BannerList from "@/components/admin/BannerList";
+import BannerList from "@/components/admin/bannerList";
 
 function BannerSetting() {
   const dispatch = useDispatch();
