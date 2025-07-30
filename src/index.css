@@ -1,0 +1,105 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 30 30% 98%;                    /* hampir putih */
+    --foreground: 20 15% 15%;                    /* #3d2b1f */
+    --card: 0 0% 100%;                           /* putih */
+    --card-foreground: 30 10% 20%;               /* kayu gelap */
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 30 10% 20%;
+
+    --primary: 17 17% 29%;                       /* #5d4037 */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 33 46% 74%;                     /* #d7b899 → disesuaikan */
+    --secondary-foreground: 30 20% 20%;
+
+    --muted: 30 30% 95%;                         /* #f7f1ea */
+    --muted-foreground: 30 10% 50%;              /* #8c715c */
+
+    --accent: 17 21% 25%;                        /* #4e342e (accent kayu gelap) */
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 70% 55%;                    /* #e53e3e */
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 30 20% 80%;                        /* #ddd2c2 */
+    --input: 30 20% 85%;                         /* #e9dfd3 */
+    --ring: 30 30% 60%;                          /* #b89c7a */
+
+    --radius: 0.5rem;
+
+    --chart-1: 18 76% 61%;                       /* oranye kayu */
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+
+    --primary-custom: 17 17% 29%;                /* #5d4037 */
+    --primary-custom-foreground: 0 0% 100%;
+
+    --secondary-custom: 33 46% 74%;              /* #d7b899 */
+    --secondary-custom-foreground: 30 20% 20%;
+
+    --accent-custom: 17 21% 25%;                 /* #4e342e */
+    --accent-custom-foreground: 0 0% 100%;
+
+    --neutral-light: 30 20% 96%;
+    --neutral-dark: 30 20% 25%;
+  }
+
+  .dark {
+    --background: 30 20% 10%;                    /* #1a150f */
+    --foreground: 30 10% 85%;
+    --card: 30 20% 15%;
+    --card-foreground: 30 10% 90%;
+    --popover: 30 20% 12%;
+    --popover-foreground: 30 10% 90%;
+
+    --primary: 17 17% 29%;                       /* tetap #5d4037 */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 33 46% 74%;                     /* #d7b899 */
+    --secondary-foreground: 30 20% 20%;
+
+    --muted: 30 15% 20%;
+    --muted-foreground: 30 15% 70%;
+
+    --accent: 17 21% 25%;                        /* #4e342e */
+    --accent-foreground: 30 10% 90%;
+
+    --destructive: 0 70% 40%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 30 15% 25%;
+    --input: 30 15% 25%;
+    --ring: 30 15% 50%;
+
+    --primary-custom: 17 17% 29%;                /* #5d4037 */
+    --primary-custom-foreground: 0 0% 100%;
+
+    --secondary-custom: 33 46% 74%;              /* #d7b899 */
+    --secondary-custom-foreground: 30 20% 20%;
+
+    --accent-custom: 17 21% 25%;                 /* #4e342e */
+    --accent-custom-foreground: 0 0% 100%;
+
+    --neutral-light: 30 20% 10%;
+    --neutral-dark: 30 20% 90%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
