@@ -1,5 +1,5 @@
 import { useState } from "react";
-import BannerSetting from "@/components/admin/BannerSetting";
+import BannerSetting from "@/components/admin/bannerSetting";
 import NotificationSetting from "@/components/admin/notificationSetting";
 import { Button } from "@/components/ui/button";
 
