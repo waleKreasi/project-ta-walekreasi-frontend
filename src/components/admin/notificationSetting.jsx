@@ -7,7 +7,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
-import NotificationHistory from "@/components/admin/NotificationHistory";
+import NotificationHistory from "@/components/admin/notificationHistory";
 
 function NotificationSetting() {
   const dispatch = useDispatch();
