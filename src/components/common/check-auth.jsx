@@ -1,8 +1,14 @@
 import { Navigate, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-function CheckAuth({ isAuthenticated, user, requiredRole, children }) {
+function CheckAuth({ requiredRole, children }) {
   const location = useLocation();
   const { pathname } = location;
+  const { isAuthenticated, user, isLoading } = useSelector((state) => state.auth);
+
+  if (isLoading) {
+    return <div className="text-center py-10 text-gray-500">Memuat...</div>;
+  }
 
   // ✅ Daftar path yang boleh diakses tanpa login
   const publicPaths = [
@@ -20,9 +26,7 @@ function CheckAuth({ isAuthenticated, user, requiredRole, children }) {
 
   // 1️⃣ Jika belum login dan bukan halaman publik → arahkan ke login
   if (!isAuthenticated && !isPublicPage) {
-    return (
-      <Navigate to="/auth/login" replace state={{ from: location }} />
-    );
+    return <Navigate to="/auth/login" replace state={{ from: location }} />;
   }
 
   // 2️⃣ Jika sudah login tapi akses halaman public/auth (kecuali /register-seller untuk customer)
@@ -63,4 +67,3 @@ function CheckAuth({ isAuthenticated, user, requiredRole, children }) {
 }
 
 export default CheckAuth;
-  

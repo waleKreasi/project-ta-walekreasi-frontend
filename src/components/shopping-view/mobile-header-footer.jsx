@@ -17,7 +17,7 @@ import UserCartWrapper from "./cart-wrapper";
 
 export default function MobileHeaderFooterLayout({ children }) {
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.auth);
+  const { user, isAuthenticated } = useSelector((state) => state.auth);
   const cartData = useSelector((state) => state.shopCart.cartData || []);
   const [openCart, setOpenCart] = useState(false);
 
@@ -40,6 +40,7 @@ export default function MobileHeaderFooterLayout({ children }) {
           <img src={logoWaleKreasi} alt="Logo" className="w-8 h-8" />
           <span className="text-lg font-semibold">WaleKreasi</span>
         </div>
+
         <div className="flex items-center gap-4">
           <Link to="/shop/search">
             <FiSearch className="w-6 h-6" />
@@ -80,18 +81,18 @@ export default function MobileHeaderFooterLayout({ children }) {
         </Link>
 
         <Link
-          to={user ? "/shop/account" : "/auth/login"}
+          to={isAuthenticated ? "/shop/account" : "/auth/login"}
           className="flex flex-col items-center text-sm"
         >
-          {user ? (
+          {isAuthenticated ? (
             <>
               <FiUser className="w-5 h-5 mb-1" />
-              <span>Akun</span>
+              <span>Saya</span>
             </>
           ) : (
             <>
               <FiLogIn className="w-5 h-5 mb-1" />
-              <span>Masuk |   Daftar</span>
+              <span>Masuk | Daftar</span>
             </>
           )}
         </Link>
