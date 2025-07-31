@@ -19,6 +19,7 @@ export default defineConfig(({ mode }) => {
           "pwa-512x512.png"
         ],
         manifest: {
+          id: "/?source=pwa",
           name: "WaleKreasi.",
           short_name: "WaleKreasi",
           description: "Marketplace Ragam Kerajinan Lokal Sulawesi Utara",

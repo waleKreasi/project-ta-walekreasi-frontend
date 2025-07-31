@@ -81,7 +81,7 @@ export default function MobileHeaderFooterLayout({ children }) {
         </Link>
 
         <Link
-          to={isAuthenticated ? "/shop/account" : "/auth/login"}
+          to={isAuthenticated ? "/shop/home" : "/auth/login"}
           className="flex flex-col items-center text-sm"
         >
           {isAuthenticated ? (

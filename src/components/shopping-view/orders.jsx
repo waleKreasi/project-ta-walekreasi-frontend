@@ -139,7 +139,7 @@ function ShoppingOrders({ activeStatus }) {
 
       {/* Dialog Global */}
       <Dialog open={openDetailsDialog} onOpenChange={handleCloseDialog}>
-        <DialogContent className="max-w-full sm:max-w-[700px] max-h-lvh sm:max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-screen max-h-screen lg:max-w-screen-lg lg:max-h-[90vh] overflow-y-auto">
           <VisuallyHidden>
             <DialogTitle>Detail Pesanan</DialogTitle>
           </VisuallyHidden>

@@ -46,7 +46,6 @@ function ShoppingHome() {
   const { latestProducts, productDetails } = useSelector((state) => state.shopProducts);
   const landingBanners = useSelector(selectLandingBanners);
 
-  // 🛑 Tunda render jika auth masih loading (khusus saat login)
   if (authLoading || user === undefined) {
     return (
       <div className="min-h-screen flex items-center justify-center text-gray-500">
@@ -54,9 +53,6 @@ function ShoppingHome() {
       </div>
     );
   }
-
-  // 🧠 Debugging
-  console.log("📌 user in ShoppingHome:", user);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -157,7 +153,7 @@ function ShoppingHome() {
       </div>
 
       {/* 🧭 Category Section */}
-      <section className="mt-6 bg-gray-50 rounded-xl md:p-2">
+      <section className="mt-6 bg-yellow-50 rounded-xl md:p-2">
         <div className="mx-auto p-6">
           <h2 className="text-xl py-1 md:text-2xl font-bold border-b border-gray-200">
             Belanja Berdasarkan Kategori

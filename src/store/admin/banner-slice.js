@@ -28,16 +28,21 @@ export const uploadBanner = createAsyncThunk(
   "banner/uploadBanner",
   async (formData, { rejectWithValue }) => {
     try {
-      const res = await axios.post("https://project-ta-walekreasi-backend-production.up.railway.app/api/admin/banner/upload", formData, {
-        withCredentials: true,
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const res = await axios.post(
+        "https://project-ta-walekreasi-backend-production.up.railway.app/api/admin/banner/upload",
+        formData,
+        {
+          withCredentials: true,
+        }
+      );
       return res.data.data;
     } catch (err) {
       return rejectWithValue(err.response?.data?.message || err.message);
     }
   }
 );
+
+
 
 // Thunk untuk delete banner
 export const deleteBanner = createAsyncThunk(
