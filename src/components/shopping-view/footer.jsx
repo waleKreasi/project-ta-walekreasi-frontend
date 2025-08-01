@@ -4,7 +4,7 @@ import logoWaleKreasi from "../../assets/logo-WaleKreasi.png";
 
 function Footer() {
   return (
-    <footer className="bg-yellow-50 border-t mt-16">
+    <footer className="bg-secondary/25 border-t mt-16">
       <div className="container px-6 md:px-12 py-10 text-sm text-gray-700">
         <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr_1fr] gap-4">
           {/* Logo dan Deskripsi */}

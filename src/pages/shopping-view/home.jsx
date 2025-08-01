@@ -153,7 +153,7 @@ function ShoppingHome() {
       </div>
 
       {/* 🧭 Category Section */}
-      <section className="mt-6 bg-yellow-50 rounded-xl md:p-2">
+      <section className="mt-6 bg-secondary/25 rounded-xl p-2">
         <div className="mx-auto p-6">
           <h2 className="text-xl py-1 md:text-2xl font-bold border-b border-gray-200">
             Belanja Berdasarkan Kategori
