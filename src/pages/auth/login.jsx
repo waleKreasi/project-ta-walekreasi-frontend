@@ -84,25 +84,30 @@ function AuthLogin() {
         </div>
       </div>
 
-      {/* Header Text */}
-      <div className="space-y-2 text-left">
-        <h1 className="text-2xl font-semibold text-gray-900">Masuk ke Akun Anda</h1>
-        <p className="text-sm text-gray-600">
-          Belum punya akun?
-          <Link to="/auth/register" className="ml-2 text-primary font-semibold hover:underline">
-            Mendaftar
-          </Link>
-        </p>
+      
+      <div className="max-w-md mx-auto mt-10 p-8 bg-white border border-gray-200 rounded-xl shadow-xl">
+        <div className="space-y-2 text-left mb-8">
+          <h1 className="text-2xl font-semibold text-gray-900">Masuk ke Akun Anda</h1>
+          <p className="text-sm text-gray-600">
+            Belum punya akun?
+            <Link
+              to="/auth/register"
+              className="ml-2 text-primary font-semibold hover:underline"
+            >
+              Mendaftar
+            </Link>
+          </p>
+        </div>
+
+        <CommonForm
+          formControls={loginFormControls}
+          buttonText="Masuk"
+          formData={formData}
+          setFormData={setFormData}
+          onSubmit={onSubmit}
+        />
       </div>
 
-      {/* Form Login */}
-      <CommonForm
-        formControls={loginFormControls}
-        buttonText="Masuk"
-        formData={formData}
-        setFormData={setFormData}
-        onSubmit={onSubmit}
-      />
     </div>
   );
 }

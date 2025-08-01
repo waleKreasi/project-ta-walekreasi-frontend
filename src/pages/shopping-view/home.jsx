@@ -109,7 +109,7 @@ function ShoppingHome() {
   return (
     <div className="md:container flex flex-col min-h-screen">
       {/* 🖼️ Banner Section */}
-      <div className="relative w-screen max-w-full aspect-[4/2] sm:aspect-[6/2] md:aspect-[16/4] overflow-hidden md:mt-8 md:rounded-xl md:border">
+      <div className="relative w-screen max-w-full aspect-[4/2] sm:aspect-[6/2] md:aspect-[16/4] overflow-hidden md:mt-8 mb-3 md:rounded-xl md:border">
         {landingBanners && landingBanners.length > 0 ? (
           landingBanners.map((slide, index) => (
             <div key={index}>
@@ -153,7 +153,7 @@ function ShoppingHome() {
       </div>
 
       {/* 🧭 Category Section */}
-      <section className="mt-6 bg-secondary/25 rounded-xl p-2">
+      <section className="mt-6 bg-secondary/25 rounded-xl md:p-2 m-3 md:m-0">
         <div className="mx-auto p-6">
           <h2 className="text-xl py-1 md:text-2xl font-bold border-b border-gray-200">
             Belanja Berdasarkan Kategori

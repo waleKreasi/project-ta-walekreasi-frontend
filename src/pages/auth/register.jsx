@@ -47,25 +47,30 @@ function AuthRegister() {
         </div>
       </div>
 
-      {/* Judul & Link login */}
-      <div className="space-y-2 text-left">
-        <h1 className="text-2xl font-semibold text-gray-900">Buat Akun Baru</h1>
-        <p className="text-sm text-gray-600">
-          Sudah punya akun?
-          <Link to="/auth/login" className="ml-2 text-primary font-semibold hover:underline">
-            Masuk
-          </Link>
-        </p>
+      <div className="max-w-md mx-auto mt-10 p-8 bg-white border border-gray-200 rounded-xl shadow-xl">
+        {/* Judul & Link login */}
+        <div className="space-y-2 mb-6 text-left">
+          <h1 className="text-2xl font-semibold text-gray-900">Buat Akun Baru</h1>
+          <p className="text-sm text-gray-600">
+            Sudah punya akun?
+            <Link to="/auth/login" className="ml-2 text-primary font-semibold hover:underline">
+              Masuk
+            </Link>
+          </p>
+        </div>
+
+        {/* Form */}
+        <CommonForm
+          formControls={registerFormControls}
+          buttonText="Mendaftar"
+          formData={formData}
+          setFormData={setFormData}
+          onSubmit={onSubmit}
+        />
+
       </div>
 
-      {/* Form */}
-      <CommonForm
-        formControls={registerFormControls}
-        buttonText="Mendaftar"
-        formData={formData}
-        setFormData={setFormData}
-        onSubmit={onSubmit}
-      />
+      
     </div>
   );
 }
