@@ -2,8 +2,8 @@ import { Route, Routes, Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { checkAuth } from "./store/auth-slice";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Toast } from "@/components/ui/toast";
+
 
 import AuthLayout from "./components/auth/layout";
 import AuthLogin from "./pages/auth/login";
@@ -36,6 +36,7 @@ import CustomersInfoPage from "./pages/admin/customersInfo";
 import TransactionsPage from "./pages/admin/transactionsPage";
 import TransactionDetailPage from "./pages/admin/transactionsDetailPage";
 import AdminSettingPage from "./pages/admin/settingPage";
+import { Loader2 } from "lucide-react";
 
 import { requestForToken, onMessageListener } from "./firebase/firebase.config";
 
@@ -71,8 +72,19 @@ function App() {
     }
   }, [user]);
 
-if (isLoading) return <Skeleton className="w-full bg-black" />;
-
+  if (isLoading) {
+    return (
+      <div className="w-screen h-screen flex flex-col items-center justify-center bg-white">
+        {/* 🔄 Icon loading berputar */}
+        <Loader2 className="h-8 w-8 text-primary animate-spin" />
+        <p className="text-lg text-primary mt-4">Memuat...</p>
+      </div>
+    );
+  }
+  
+  
+  
+  
 return (
   <div
     className={`flex flex-col overflow-x-hidden bg-white min-h-screen ${

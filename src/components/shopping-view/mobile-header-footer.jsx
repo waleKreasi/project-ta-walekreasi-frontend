@@ -6,20 +6,23 @@ import {
   FiShoppingCart,
   FiHome,
   FiUser,
-  FiBriefcase,
   FiLogIn,
 } from "react-icons/fi";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import logoWaleKreasi from "@/assets/logo-WaleKreasi.png";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { Button } from "../ui/button";
 import UserCartWrapper from "./cart-wrapper";
+import { ShoppingBag } from "lucide-react";
 
 export default function MobileHeaderFooterLayout({ children }) {
   const dispatch = useDispatch();
   const { user, isAuthenticated } = useSelector((state) => state.auth);
   const cartData = useSelector((state) => state.shopCart.cartData || []);
   const [openCart, setOpenCart] = useState(false);
+
+  const location = useLocation();
+  const currentPath = location.pathname;
 
   const totalItems = cartData.reduce(
     (total, store) => total + (store.items?.length || 0),
@@ -70,19 +73,38 @@ export default function MobileHeaderFooterLayout({ children }) {
 
       {/* Fixed Footer */}
       <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t shadow flex justify-around py-2">
-        <Link to="/auth/register-seller" className="flex flex-col items-center text-sm">
-          <FiBriefcase className="w-5 h-5 mb-1" />
-          <span>Jualan</span>
-        </Link>
 
-        <Link to="/shop/home" className="flex flex-col items-center text-sm">
+        <Link
+          to="/shop/home"
+          className={`flex flex-col items-center text-sm transition-colors ${
+            currentPath === "/shop/home"
+              ? "text-primary font-semibold"
+              : "text-gray-500"
+          }`}
+        >
           <FiHome className="w-5 h-5 mb-1" />
           <span>Beranda</span>
         </Link>
 
         <Link
+          to="/shop/listing"
+          className={`flex flex-col items-center text-sm transition-colors ${
+            currentPath === "/shop/listing"
+              ? "text-primary font-semibold"
+              : "text-gray-500"
+          }`}
+        >
+          <ShoppingBag className="w-5 h-5 mb-1" />
+          <span>Belanja</span>
+        </Link>
+
+        <Link
           to={isAuthenticated ? "/shop/account" : "/auth/login"}
-          className="flex flex-col items-center text-sm"
+          className={`flex flex-col items-center text-sm transition-colors ${
+            currentPath.startsWith("/shop/account") || currentPath === "/auth/login"
+              ? "text-primary font-semibold"
+              : "text-gray-500"
+          }`}
         >
           {isAuthenticated ? (
             <>
@@ -92,7 +114,7 @@ export default function MobileHeaderFooterLayout({ children }) {
           ) : (
             <>
               <FiLogIn className="w-5 h-5 mb-1" />
-              <span>Masuk | Daftar</span>
+              <span>Masuk</span>
             </>
           )}
         </Link>

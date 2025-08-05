@@ -17,6 +17,7 @@ import ShoppingProductTile from "@/components/shopping-view/product-tile";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Lamp,
   Gift,
@@ -34,6 +35,23 @@ const categoriesWithIcon = [
   { id: "eco-friendly", label: "Produk Ramah Lingkungan", icon: Sprout },
 ];
 
+function SkeletonBanner() {
+  return (
+    <Skeleton className="w-full h-full rounded-xl bg-gray-300" />
+  );
+}
+
+function SkeletonProductTile() {
+  return (
+    <div className="rounded-md border p-2 space-y-2 animate-pulse">
+      <Skeleton className="h-36 w-full rounded-md bg-gray-300" />
+      <Skeleton className="h-4 w-3/4 bg-gray-300" />
+      <Skeleton className="h-3 w-1/2 bg-gray-200" />
+      <Skeleton className="h-4 w-2/3 bg-gray-300" />
+    </div>
+  );
+}
+
 function ShoppingHome() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -41,18 +59,24 @@ function ShoppingHome() {
 
   const [currentSlide, setCurrentSlide] = useState(0);
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
+  const [isLoadingBanners, setIsLoadingBanners] = useState(true);
+  const [isLoadingProducts, setIsLoadingProducts] = useState(true);
 
-  const { user, isLoading: authLoading } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth);
   const { latestProducts, productDetails } = useSelector((state) => state.shopProducts);
   const landingBanners = useSelector(selectLandingBanners);
 
-  if (authLoading || user === undefined) {
-    return (
-      <div className="min-h-screen flex items-center justify-center text-gray-500">
-        Memuat...
-      </div>
-    );
-  }
+  useEffect(() => {
+    dispatch(fetchLatestProducts()).finally(() => setIsLoadingProducts(false));
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(fetchBanners()).finally(() => setIsLoadingBanners(false));
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (productDetails !== null) setOpenDetailsDialog(true);
+  }, [productDetails]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -60,18 +84,6 @@ function ShoppingHome() {
     }, 3000);
     return () => clearInterval(timer);
   }, [landingBanners]);
-
-  useEffect(() => {
-    dispatch(fetchLatestProducts());
-  }, [dispatch]);
-
-  useEffect(() => {
-    dispatch(fetchBanners());
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (productDetails !== null) setOpenDetailsDialog(true);
-  }, [productDetails]);
 
   function handleNavigateToListingPage(item, section) {
     sessionStorage.removeItem("filters");
@@ -110,7 +122,9 @@ function ShoppingHome() {
     <div className="md:container flex flex-col min-h-screen">
       {/* 🖼️ Banner Section */}
       <div className="relative w-screen max-w-full aspect-[4/2] sm:aspect-[6/2] md:aspect-[16/4] overflow-hidden md:mt-8 mb-3 md:rounded-xl md:border">
-        {landingBanners && landingBanners.length > 0 ? (
+        {isLoadingBanners ? (
+          <SkeletonBanner />
+        ) : landingBanners && landingBanners.length > 0 ? (
           landingBanners.map((slide, index) => (
             <div key={index}>
               <img
@@ -135,7 +149,7 @@ function ShoppingHome() {
           </div>
         )}
 
-        {landingBanners.length > 1 && (
+        {!isLoadingBanners && landingBanners.length > 1 && (
           <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-30 flex gap-2">
             {landingBanners.map((_, index) => (
               <button
@@ -184,7 +198,11 @@ function ShoppingHome() {
             Produk Unggulan
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 py-3 md:py-6">
-            {latestProducts && latestProducts.length > 0 ? (
+            {isLoadingProducts ? (
+              Array.from({ length: 5 }).map((_, i) => (
+                <SkeletonProductTile key={i} />
+              ))
+            ) : latestProducts && latestProducts.length > 0 ? (
               latestProducts.map((product) => (
                 <ShoppingProductTile
                   key={product._id}
