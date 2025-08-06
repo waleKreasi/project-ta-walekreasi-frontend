@@ -1,11 +1,11 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 
 import CommonForm from "@/components/common/form";
 import { useToast } from "@/components/ui/use-toast";
 import { loginFormControls } from "@/config";
-import { loginUser, checkAuth } from "@/store/auth-slice";
+import { loginUser } from "@/store/auth-slice";
 
 import logoWaleKreasi from "../../assets/logo-WaleKreasi.png";
 
@@ -21,42 +21,20 @@ function AuthLogin() {
   const location = useLocation();
   const { toast } = useToast();
 
+  const { user, isAuthenticated, isLoading } = useSelector((state) => state.auth);
+
+  // ⏳ Submit form login
   const onSubmit = async (event) => {
     event.preventDefault();
-  
+
     try {
       const result = await dispatch(loginUser(formData));
-  
+
       if (result?.payload?.success) {
         toast({
           title: result.payload.message,
         });
-  
-        // ⏳ Tunggu hingga checkAuth selesai
-        const checkResult = await dispatch(checkAuth());
-  
-        if (checkResult?.payload?.success) {
-          const user = checkResult.payload.user;
-          const role = user?.role;
-          const from = location.state?.from?.pathname;
-  
-          if (from && from !== "/auth/login") {
-            navigate(from, { replace: true });
-          } else {
-            switch (role) {
-              case "seller":
-                navigate("/store/profile", { replace: true });
-                break;
-              case "admin":
-                navigate("/admin", { replace: true });
-                break;
-              case "customer":
-              default:
-                navigate("/shop/home", { replace: true });
-                break;
-            }
-          }
-        }
+        // ⏳ Navigasi akan dilakukan di useEffect setelah isAuthenticated true
       } else {
         toast({
           title: result?.payload?.message || "Login gagal",
@@ -71,7 +49,31 @@ function AuthLogin() {
       });
     }
   };
-  
+
+  // ✅ Redirect setelah user berhasil login
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      const role = user?.role;
+      const from = location.state?.from?.pathname;
+
+      if (from && from !== "/auth/login") {
+        navigate(from, { replace: true });
+      } else {
+        switch (role) {
+          case "seller":
+            navigate("/store/profile", { replace: true });
+            break;
+          case "admin":
+            navigate("/admin", { replace: true });
+            break;
+          case "customer":
+          default:
+            navigate("/shop/home", { replace: true });
+            break;
+        }
+      }
+    }
+  }, [isAuthenticated, user, navigate, location.state]);
 
   return (
     <div className="x-auto w-full max-w-md space-y-8 px-4">
@@ -84,7 +86,6 @@ function AuthLogin() {
         </div>
       </div>
 
-      
       <div className="max-w-md mx-auto mt-10 p-8 bg-white border border-gray-200 rounded-xl shadow-xl">
         <div className="space-y-2 text-left mb-8">
           <h1 className="text-2xl font-semibold text-gray-900">Masuk ke Akun Anda</h1>
@@ -101,13 +102,12 @@ function AuthLogin() {
 
         <CommonForm
           formControls={loginFormControls}
-          buttonText="Masuk"
+          buttonText={isLoading ? "Memproses..." : "Masuk"}
           formData={formData}
           setFormData={setFormData}
           onSubmit={onSubmit}
         />
       </div>
-
     </div>
   );
 }
