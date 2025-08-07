@@ -30,17 +30,30 @@ export const getOrderDetailsForSeller = createAsyncThunk(
 
 export const updateOrderStatus = createAsyncThunk(
   "/order/updateOrderStatus",
-  async ({ id, orderStatus }) => {
-    const response = await axios.put(
-      `https://project-ta-walekreasi-backend-production.up.railway.app/api/store/orders/update/${id}`,
-      {
-        orderStatus,
-      }
-    );
+  async ({ id, orderStatus }, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(
+        `https://project-ta-walekreasi-backend-production.up.railway.app/api/store/orders/update/${id}`,
+        { orderStatus },
+        { headers: { "Content-Type": "application/json" } }
+      );
 
-    return response.data;
+      const resData = response.data;
+
+      // Jika sukses false, anggap gagal
+      if (!resData.success) {
+        return rejectWithValue(resData.message || "Gagal memperbarui status");
+      }
+
+      return resData;
+    } catch (error) {
+      console.error("Update status failed:", error.response?.data || error.message);
+      return rejectWithValue(error.response?.data || "Gagal memperbarui status");
+    }
   }
 );
+
+
 
 const sellerOrderSlice = createSlice({
   name: "sellerOrderSlice",

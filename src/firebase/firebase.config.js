@@ -28,7 +28,7 @@ const requestForToken = async (userId) => {
 
     if (currentToken) {
       console.log("✅ FCM Token:", currentToken);
-      await fetch("http://localhost:5000/api/admin/notification/save-token", {
+      await fetch("https://project-ta-walekreasi-backend-production.up.railway.app/api/notification/save-token", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

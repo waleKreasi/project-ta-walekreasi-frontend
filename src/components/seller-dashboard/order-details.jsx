@@ -39,42 +39,53 @@ function SellerOrderDetailsView({ orderDetails, scrollToReview = false, onClose 
     }
   }, [scrollToReview]);
 
-  const handleUpdateStatus = async (e) => {
-    e.preventDefault();
-
-    if (!formData.status) {
-      toast({
-        title: "Status belum dipilih",
-        description: "Silakan pilih status terlebih dahulu.",
-        variant: "destructive",
-      });
-      return;
-    }
-
+  
+  const handleUpdateStatus = async () => {
     try {
       const result = await dispatch(
         updateOrderStatus({ id: orderDetails._id, orderStatus: formData.status })
       ).unwrap();
-
-      if (result.success) {
+  
+      console.log("Status update result:", result);
+  
+      // Jika response mengandung 'success: true' maka tampilkan toast berhasil
+      if (result?.success) {
         toast({
           title: "Status berhasil diperbarui",
         });
-
-        dispatch(getOrderDetailsForSeller(orderDetails._id));
-        dispatch(getAllOrdersForSeller());
-        setFormData(initialFormData);
-        if (onClose) onClose();
+      } else {
+        // Tetap tampilkan toast berhasil jika message-nya cocok
+        if (result?.message?.toLowerCase().includes("berhasil")) {
+          toast({
+            title: "Status berhasil diperbarui",
+          });
+        } else {
+          toast({
+            title: "Gagal memperbarui status",
+            description: result?.message || "Terjadi kesalahan",
+            variant: "destructive",
+          });
+        }
       }
+  
+      // Refresh data setelah toast berhasil
+      await Promise.all([
+        dispatch(getOrderDetailsForSeller(orderDetails._id)),
+        dispatch(getAllOrdersForSeller()),
+      ]);
+  
+      setFormData(initialFormData);
+      if (onClose) onClose();
     } catch (error) {
-      console.error(error);
+      console.error("Update status error (catch):", error);
       toast({
         title: "Gagal memperbarui status",
-        description: "Terjadi kesalahan, silakan coba lagi.",
+        description: error?.message || "Terjadi kesalahan",
         variant: "destructive",
       });
     }
   };
+  
 
   // ✅ Siapkan opsi dropdown status dari config
   const orderStatusOptions = Object.entries(orderStatusLabels).map(([id, label]) => ({
