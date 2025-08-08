@@ -21,6 +21,11 @@ const messaging = getMessaging(app);
 
 // Minta token FCM dari user
 const requestForToken = async (userId) => {
+  if (!userId) {
+    console.warn("⚠️ userId tidak tersedia, token tidak disimpan.");
+    return;
+  }
+
   try {
     const currentToken = await getToken(messaging, {
       vapidKey: "BF1azTsD0hTD93ilVDdP7sqhDFgKIwY1E3l2AhyH6Vn-RxSGquZ71kHAMGTyRxLHoV3hOZI6Ylh6Xyij_nI04pQ",
@@ -28,17 +33,28 @@ const requestForToken = async (userId) => {
 
     if (currentToken) {
       console.log("✅ FCM Token:", currentToken);
-      await fetch("https://project-ta-walekreasi-backend-production.up.railway.app/api/notification/save-token", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          fcmToken: currentToken,
-          userId, // wajib
-        }),
-      });
+
+      try {
+        const res = await fetch("https://project-ta-walekreasi-backend-production.up.railway.app/api/notification/save-token", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            fcmToken: currentToken,
+            userId,
+          }),
+        });
+
+        if (!res.ok) {
+          throw new Error(`Gagal menyimpan token: ${res.status}`);
+        }
+
+        console.log("✅ Token FCM berhasil disimpan ke backend.");
+      } catch (error) {
+        console.error("❌ Error menyimpan token:", error);
+      }
     } else {
       console.warn("⚠️ Tidak ada token tersedia. Izin belum diberikan.");
     }
@@ -47,12 +63,15 @@ const requestForToken = async (userId) => {
   }
 };
 
-
 // Listener notifikasi saat app di foreground
 const onMessageListener = () =>
   new Promise((resolve) => {
     onMessage(messaging, (payload) => {
-      console.log("📩 Notifikasi diterima (foreground):", payload);
+      console.log("📩 Notifikasi diterima (foreground):", {
+        title: payload?.notification?.title,
+        body: payload?.notification?.body,
+        data: payload?.data,
+      });
       resolve(payload);
     });
   });

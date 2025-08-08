@@ -15,24 +15,30 @@ firebase.initializeApp({
 // Inisialisasi messaging
 const messaging = firebase.messaging();
 
-// Handle notifikasi saat di background
+// Handle notifikasi saat aplikasi di background
 messaging.onBackgroundMessage(function (payload) {
-  console.log('[firebase-messaging-sw.js] Received background message ', payload);
+  console.log('[firebase-messaging-sw.js] 📩 Background message received:', payload);
 
   const notificationTitle = payload.notification.title;
+  const rawData = payload.data || {};
+
   const notificationOptions = {
     body: payload.notification.body,
-    icon: '/icons/icon-192x192.png', // pastikan path icon valid
-    data: payload.data, // agar bisa di-handle saat di-click
+    icon: '/icons/icon-192x192.png',
+    data: {
+      orderId: String(rawData.orderId || ""),
+      type: String(rawData.type || ""),
+    },
   };
 
-  // Tampilkan notifikasi
   self.registration.showNotification(notificationTitle, notificationOptions);
 });
 
-// (Opsional) Handle click pada notifikasi
+// Handle klik pada notifikasi
 self.addEventListener('notificationclick', function (event) {
   const data = event.notification.data;
+  console.log('🔔 Notifikasi diklik:', data);
+
   event.notification.close();
 
   if (data && data.orderId) {
