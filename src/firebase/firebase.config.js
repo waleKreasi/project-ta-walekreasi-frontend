@@ -42,9 +42,9 @@ const requestForToken = async (userId) => {
           },
           credentials: "include",
           body: JSON.stringify({
-            fcmToken: currentToken,
-            userId,
+            token: currentToken,
           }),
+          
         });
 
         if (!res.ok) {
