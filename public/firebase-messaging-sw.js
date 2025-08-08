@@ -42,7 +42,7 @@ self.addEventListener('notificationclick', function (event) {
   event.notification.close();
 
   if (data && data.orderId) {
-    const urlToOpen = `/order/${data.orderId}`;
+    const urlToOpen = `/shop/account`;
     event.waitUntil(
       clients.matchAll({ type: "window", includeUncontrolled: true }).then(windowClients => {
         for (let client of windowClients) {
