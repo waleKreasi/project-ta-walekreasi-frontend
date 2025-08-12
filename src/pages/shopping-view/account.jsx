@@ -27,9 +27,9 @@ import Address from "@/components/shopping-view/address";
 import { CircleUser, ShoppingBag, MapPin, LogOut, Store } from "lucide-react";
 
 const tabNavs = [
-  { key: "akun", label: "Biodata Diri", Icon: CircleUser },
   { key: "pesanan", label: "Riwayat Pesanan", Icon: ShoppingBag },
   { key: "alamat", label: "Daftar Alamat", Icon: MapPin },
+  { key: "akun", label: "Biodata Diri", Icon: CircleUser },
 ];
 
 const statusTabs = [

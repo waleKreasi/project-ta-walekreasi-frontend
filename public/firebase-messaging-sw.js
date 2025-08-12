@@ -19,11 +19,11 @@ const messaging = firebase.messaging();
 messaging.onBackgroundMessage(function (payload) {
   console.log('[firebase-messaging-sw.js] 📩 Background message received:', payload);
 
-  const notificationTitle = payload.notification.title;
+  const notificationTitle = payload.notification?.title || "Notifikasi Baru";
   const rawData = payload.data || {};
 
   const notificationOptions = {
-    body: payload.notification.body,
+    body: payload.notification?.body || "",
     icon: '/icons/icon-192x192.png',
     data: {
       orderId: String(rawData.orderId || ""),
@@ -36,24 +36,31 @@ messaging.onBackgroundMessage(function (payload) {
 
 // Handle klik pada notifikasi
 self.addEventListener('notificationclick', function (event) {
-  const data = event.notification.data;
+  const data = event.notification.data || {};
   console.log('🔔 Notifikasi diklik:', data);
 
   event.notification.close();
 
-  if (data && data.orderId) {
-    const urlToOpen = `/shop/account`;
-    event.waitUntil(
-      clients.matchAll({ type: "window", includeUncontrolled: true }).then(windowClients => {
-        for (let client of windowClients) {
-          if (client.url.includes(urlToOpen) && 'focus' in client) {
-            return client.focus();
-          }
-        }
-        if (clients.openWindow) {
-          return clients.openWindow(urlToOpen);
-        }
-      })
-    );
+  let urlToOpen = '/'; // default halaman utama
+
+  if (data.type === 'customer') {
+    urlToOpen = '/shop/account';
+  } else if (data.type === 'seller') {
+    urlToOpen = '/store/orders';
+  } else if (data.type === 'welcome') {
+    urlToOpen = '/shop/home'; // halaman sambutan customer baru
   }
+
+  event.waitUntil(
+    clients.matchAll({ type: "window", includeUncontrolled: true }).then(windowClients => {
+      for (let client of windowClients) {
+        if (client.url.includes(urlToOpen) && 'focus' in client) {
+          return client.focus();
+        }
+      }
+      if (clients.openWindow) {
+        return clients.openWindow(urlToOpen);
+      }
+    })
+  );
 });

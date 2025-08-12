@@ -56,7 +56,7 @@ function ShoppingOrders({ activeStatus }) {
 
   if (!filteredOrders || filteredOrders.length === 0)
     return (
-      <p className="text-sm text-gray-500">
+      <p className="text-sm text-center text-gray-500 p-4">
         Belum ada pesanan untuk status ini.
       </p>
     );
