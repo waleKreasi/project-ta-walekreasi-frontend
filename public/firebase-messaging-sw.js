@@ -31,6 +31,7 @@ messaging.onBackgroundMessage(function (payload) {
     },
   };
 
+  console.log('Menampilkan notifikasi dengan opsi:', notificationOptions);
   self.registration.showNotification(notificationTitle, notificationOptions);
 });
 
@@ -50,6 +51,8 @@ self.addEventListener('notificationclick', function (event) {
   } else if (data.type === 'welcome') {
     urlToOpen = '/shop/home'; // halaman sambutan customer baru
   }
+
+  console.log('Membuka URL:', urlToOpen);
 
   event.waitUntil(
     clients.matchAll({ type: "window", includeUncontrolled: true }).then(windowClients => {
