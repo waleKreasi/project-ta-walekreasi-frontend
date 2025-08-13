@@ -44,34 +44,41 @@ function App() {
   const { user, isAuthenticated, isLoading } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
-  const hasRequestedToken = useRef(false);
 
   useEffect(() => {
     dispatch(checkAuth());
-
     const handleOnline = () => setIsOffline(false);
     const handleOffline = () => setIsOffline(true);
-
     window.addEventListener("online", handleOnline);
     window.addEventListener("offline", handleOffline);
-
     return () => {
       window.removeEventListener("online", handleOnline);
       window.removeEventListener("offline", handleOffline);
     };
   }, [dispatch]);
 
+  // useEffect untuk meminta token (tetap di sini)
   useEffect(() => {
-    if (user?.id && !hasRequestedToken.current) {
-      hasRequestedToken.current = true;
+    if (user?.id) {
       requestForToken(user.id);
-      onMessageListener().then((payload) => {
-        Toast({
-          title: payload.notification?.title,
-          description: payload.notification?.body,
-        });
-      });
     }
+  }, [user]);
+
+  // ✅ useEffect yang diperbaiki untuk listener notifikasi
+  useEffect(() => {
+    // Memastikan user ID ada sebelum memulai listener
+    if (!user?.id) return;
+
+    // Asumsi onMessageListener mengembalikan fungsi unsubscribe
+    const unsubscribe = onMessageListener((payload) => {
+      Toast({
+        title: payload.notification?.title,
+        description: payload.notification?.body,
+      });
+    });
+
+    // Fungsi cleanup untuk menghentikan listener saat komponen dilepas
+    return () => unsubscribe();
   }, [user]);
 
   if (isLoading) {
