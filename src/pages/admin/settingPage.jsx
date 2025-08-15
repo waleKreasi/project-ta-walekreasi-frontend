@@ -1,6 +1,6 @@
 import { useState } from "react";
 import BannerSetting from "@/components/admin/bannerSetting";
-import NotificationSetting from "@/components/admin/notificationSetting";
+// import NotificationSetting from "@/components/admin/notificationSetting";
 import { Button } from "@/components/ui/button";
 
 function AdminSettingPage() {
@@ -17,16 +17,16 @@ function AdminSettingPage() {
         >
           Banner Setting
         </Button>
-        <Button
+        {/* <Button
           variant={activeTab === "notification" ? "default" : "outline"}
           onClick={() => setActiveTab("notification")}
         >
           Notifikasi Setting
-        </Button>
+        </Button> */}
       </div>
 
       {activeTab === "banner" && <BannerSetting />}
-      {activeTab === "notification" && <NotificationSetting />}
+      {/* {activeTab === "notification" && <NotificationSetting />} */}
     </div>
   );
 }

@@ -1,75 +1,165 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-export const fetchUnpaidOrders = createAsyncThunk(
-  "payout/fetchUnpaidOrders",
-  async () => {
-    const res = await axios.get("https://project-ta-walekreasi-backend-production.up.railway.app/api/admin/payout/unpaid", { withCredentials: true });
-    return res.data.data;
+// URL dasar API
+const API_URL = "https://project-ta-walekreasi-backend-production.up.railway.app/api";
+
+// Opsi konfigurasi umum untuk semua panggilan API yang memerlukan otentikasi
+// Ini akan memastikan cookie otentikasi disertakan
+const authConfig = {
+  withCredentials: true,
+};
+
+// Action untuk mengambil daftar seller yang belum dibayar
+export const fetchUnpaidSellers = createAsyncThunk(
+  "payout/fetchUnpaidSellers",
+  async (_, { rejectWithValue }) => {
+    try {
+      // ✅ Tidak perlu lagi mengambil token dari localStorage
+      const response = await axios.get(`${API_URL}/admin/payout/unpaid-sellers`, authConfig);
+      return response.data.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.message || err.message);
+    }
   }
 );
 
-
-export const markOrdersAsPaid = createAsyncThunk(
-  "payout/markOrdersAsPaid",
-  async (sellerId) => {
-    const res = await axios.post(
-      "https://project-ta-walekreasi-backend-production.up.railway.app/api/admin/payout/mark-paid",
-      { sellerId },
-      { withCredentials: true }
-    );
-    return res.data;
+// Action untuk mengambil pesanan yang belum dibayar per seller
+export const fetchUnpaidOrdersBySeller = createAsyncThunk(
+  "payout/fetchUnpaidOrdersBySeller",
+  async (sellerId, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(
+        `${API_URL}/admin/payout/unpaid-orders/${sellerId}`,
+        authConfig
+      );
+      return response.data.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.message || err.message);
+    }
   }
 );
 
-
-export const fetchPayoutHistory = createAsyncThunk(
-  "payout/fetchPayoutHistory",
-  async () => {
-    const res = await axios.get("https://project-ta-walekreasi-backend-production.up.railway.app/api/admin/payout/history", { withCredentials: true });
-    return res.data.data;
+// Action untuk menandai pembayaran dengan file bukti
+export const markPaidToSeller = createAsyncThunk(
+  "payout/markPaidToSeller",
+  async (payoutData, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        `${API_URL}/admin/payout/mark-paid`,
+        payoutData,
+        authConfig
+      );
+      return response.data.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.message || err.message);
+    }
   }
 );
 
+// Action untuk mengambil riwayat pembayaran (semua)
+export const fetchAllPayoutHistory = createAsyncThunk(
+  "payout/fetchAllPayoutHistory",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${API_URL}/admin/payout/history/all`, authConfig);
+      return response.data.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.message || err.message);
+    }
+  }
+);
+
+// Action untuk mengambil riwayat pembayaran per seller
+export const fetchPayoutHistoryBySeller = createAsyncThunk(
+  "payout/fetchPayoutHistoryBySeller",
+  async (sellerId, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(
+        `${API_URL}/admin/payout/history/${sellerId}`,
+        authConfig
+      );
+      return response.data.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.message || err.message);
+    }
+  }
+);
 
 const payoutSlice = createSlice({
   name: "payout",
   initialState: {
-    unpaidOrders: {},
+    unpaidSellers: [],
+    unpaidOrders: [],
+    sellerName: "",
     payoutHistory: [],
     loading: false,
     error: null,
-    payoutSuccess: null, 
   },
-  reducers: {
-    clearPayoutStatus: (state) => {
-      state.payoutSuccess = null;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchUnpaidOrders.pending, (state) => {
+      .addCase(fetchUnpaidSellers.pending, (state) => {
         state.loading = true;
+        state.error = null;
       })
-      .addCase(fetchUnpaidOrders.fulfilled, (state, action) => {
-        state.unpaidOrders = action.payload;
+      .addCase(fetchUnpaidSellers.fulfilled, (state, action) => {
+        state.loading = false;
+        state.unpaidSellers = action.payload;
+      })
+      .addCase(fetchUnpaidSellers.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(fetchUnpaidOrdersBySeller.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchUnpaidOrdersBySeller.fulfilled, (state, action) => {
+        state.loading = false;
+        state.unpaidOrders = action.payload.orders;
+        state.sellerName = action.payload.sellerName;
+      })
+      .addCase(fetchUnpaidOrdersBySeller.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(markPaidToSeller.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(markPaidToSeller.fulfilled, (state) => {
         state.loading = false;
       })
-      .addCase(fetchUnpaidOrders.rejected, (state, action) => {
+      .addCase(markPaidToSeller.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message;
+        state.error = action.payload;
       })
-      .addCase(markOrdersAsPaid.fulfilled, (state, action) => {
-        const sellerId = action.meta.arg;
-        delete state.unpaidOrders[sellerId];
-        state.payoutSuccess = "Pembayaran ke seller berhasil ditandai.";
+      .addCase(fetchAllPayoutHistory.pending, (state) => {
+        state.loading = true;
+        state.error = null;
       })
-      .addCase(fetchPayoutHistory.fulfilled, (state, action) => {
+      .addCase(fetchAllPayoutHistory.fulfilled, (state, action) => {
+        state.loading = false;
         state.payoutHistory = action.payload;
+      })
+      .addCase(fetchAllPayoutHistory.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(fetchPayoutHistoryBySeller.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchPayoutHistoryBySeller.fulfilled, (state, action) => {
+        state.loading = false;
+        state.payoutHistory = action.payload;
+      })
+      .addCase(fetchPayoutHistoryBySeller.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });
 
-
-export const { clearPayoutStatus } = payoutSlice.actions;
 export default payoutSlice.reducer;

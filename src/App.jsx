@@ -39,6 +39,8 @@ import AdminSettingPage from "./pages/admin/settingPage";
 import { Loader2 } from "lucide-react";
 
 import { requestForToken, onMessageListener } from "./firebase/firebase.config";
+import PayoutDetailPage from "./components/admin/PayoutDetailPage";
+import PayoutHistoryPage from "./components/admin/payoutHistory";
 
 function App() {
   const { user, isAuthenticated, isLoading } = useSelector((state) => state.auth);
@@ -179,6 +181,8 @@ function App() {
         >
           <Route index element={<AdminDashboardPage />} />
           <Route path="payout" element={<PayoutPage />} />
+          <Route path="payout/:sellerId" element={<PayoutDetailPage/>} />
+          <Route path="payout/history" element={<PayoutHistoryPage/>} />
           <Route path="sellers" element={<SellersInfoPage />} />
           <Route path="seller/:id" element={<SellerDetailPage />} />
           <Route path="customers" element={<CustomersInfoPage />} />
