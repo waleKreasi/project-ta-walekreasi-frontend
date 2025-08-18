@@ -23,12 +23,9 @@ function Greeting() {
 
   return (
     <div className="space-y-1">
-      <h1 className="text-3xl font-bold text-gray-900 leading-tight">
+      <h1 className="text-xl md:text-3xl font-bold text-gray-900 leading-tight">
         {greeting}! 👋
       </h1>
-      <p className="text-2xl text-gray-600 font-medium">
-        Admin Marketplace Walekreasi
-      </p>
     </div>
   );
 }

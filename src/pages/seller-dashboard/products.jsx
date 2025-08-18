@@ -18,7 +18,7 @@ import {
 } from "@/store/seller/products-slice";
 import { Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { CircleFadingPlus } from "lucide-react";
+import { CircleFadingPlus, ShoppingBasket } from "lucide-react";
 
 const initialFormData = {
   image: null,
@@ -99,29 +99,50 @@ function SellerProducts() {
 
   return (
     <Fragment>
-      <div className="mb-5 w-full flex justify-between items-center px-2 sm:px-4">
-        <h1 className="text-2xl font-semibold text-black">PRODUK</h1>
-        <Button onClick={() => setOpenCreateProductsDialog(true)}>
-          <CircleFadingPlus className="mr-2" />
-          Tambah Produk
-        </Button>
-      </div>
+      <div className="rounded-lg shadow-md p-4 border ">
+        {/* Header */}
+        <div className="mb-5 flex flex-col md:flex-row justify-between md:items-center px-4 py-3 border-b-2  sticky top-0 z-10 space-y-4 md:space-y-0">
+          <div className="flex gap-2 items-center">
+            <ShoppingBasket className="w-7 h-7 "/>
+            <h1 className="text-2xl font-bold text-primary">Daftar Produk</h1>
+          </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 px-2 sm:px-4">
-        {productList && productList.length > 0
-          ? productList.map((productItem) => (
-              <SellerProductTile
+          <Button
+            onClick={() => setOpenCreateProductsDialog(true)}
+            className="flex w-full md:w-fit items-center gap-2 bg-primary hover:bg-accent text-white px-4 py-2 rounded-lg shadow"
+          >
+            <CircleFadingPlus className="w-5 h-5" />
+            Tambah Produk
+          </Button>
+        </div>
+
+        {/* Grid Produk */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 px-2 sm:px-4">
+          {productList && productList.length > 0 ? (
+            productList.map((productItem) => (
+              <div
                 key={productItem._id}
-                setFormData={setFormData}
-                setOpenCreateProductsDialog={setOpenCreateProductsDialog}
-                setCurrentEditedId={setCurrentEditedId}
-                product={productItem}
-                handleDelete={handleDelete}
-              />
+                className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200"
+              >
+                <SellerProductTile
+                  setFormData={setFormData}
+                  setOpenCreateProductsDialog={setOpenCreateProductsDialog}
+                  setCurrentEditedId={setCurrentEditedId}
+                  product={productItem}
+                  handleDelete={handleDelete}
+                />
+              </div>
             ))
-          : <p className="text-gray-500 col-span-full">Belum ada produk yang ditambahkan.</p>}
+          ) : (
+            <p className="text-gray-500 col-span-full text-center py-6 bg-white rounded-lg shadow-sm">
+              Belum ada produk yang ditambahkan.
+            </p>
+          )}
+        </div>
+
       </div>
 
+      {/* Form Tambah/Ubah Produk */}
       <Sheet
         open={openCreateProductsDialog}
         onOpenChange={() => {
@@ -130,9 +151,12 @@ function SellerProducts() {
           setFormData(initialFormData);
         }}
       >
-        <SheetContent side="right" className="overflow-auto">
-          <SheetHeader>
-            <SheetTitle>
+        <SheetContent
+          side="right"
+          className="overflow-auto w-full sm:max-w-md bg-gray-50"
+        >
+          <SheetHeader className="border-b pb-3 mb-4">
+            <SheetTitle className="text-lg font-bold text-gray-800">
               {currentEditedId !== null ? "Ubah Produk" : "Tambah Produk Baru"}
             </SheetTitle>
           </SheetHeader>
@@ -155,6 +179,7 @@ function SellerProducts() {
               buttonText={currentEditedId !== null ? "Ubah" : "Tambah"}
               formControls={addProductFormElements}
               isBtnDisabled={!isFormValid()}
+              className="space-y-4"
             />
           </div>
         </SheetContent>

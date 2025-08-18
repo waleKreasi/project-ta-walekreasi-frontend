@@ -41,6 +41,8 @@ import { Loader2 } from "lucide-react";
 import { requestForToken, onMessageListener } from "./firebase/firebase.config";
 import PayoutDetailPage from "./components/admin/PayoutDetailPage";
 import PayoutHistoryPage from "./components/admin/payoutHistory";
+import SellerDashboard from "./pages/seller-dashboard/dashboard";
+import SellerPayoutPage from "./pages/seller-dashboard/payoutPage";
 
 function App() {
   const { user, isAuthenticated, isLoading } = useSelector((state) => state.auth);
@@ -166,9 +168,11 @@ function App() {
             </CheckAuth>
           }
         >
+          <Route path="dashboard" element={<SellerDashboard />} />
           <Route path="profile" element={<SellerProfilePage />} />
           <Route path="products" element={<SellerProducts />} />
           <Route path="orders" element={<SellerOrders />} />
+          <Route path="payouts" element={<SellerPayoutPage />} />
         </Route>
 
         <Route

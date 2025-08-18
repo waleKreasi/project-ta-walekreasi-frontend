@@ -3,6 +3,7 @@ import ShoppingHeader from "./header";
 import Footer from "./footer";
 import MobileHeaderFooterLayout from "./mobile-header-footer";
 import InstallButton from "../common/installButton";
+import CustomerServiceButton from "../common/csButton";
 
 function ShoppingLayout() {
   return (
@@ -24,6 +25,7 @@ function ShoppingLayout() {
         <Footer />
       </div>
 
+      <CustomerServiceButton/>
       <InstallButton />
     </>
   );

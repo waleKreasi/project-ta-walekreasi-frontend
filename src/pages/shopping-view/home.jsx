@@ -169,7 +169,7 @@ function ShoppingHome() {
       {/* 🧭 Category Section */}
       <section className="mt-6 bg-secondary/25 rounded-xl md:p-2 m-3 md:m-0">
         <div className="mx-auto p-6">
-          <h2 className="text-xl py-1 md:text-2xl font-bold border-b border-gray-200">
+          <h2 className="text-xl py-1 md:text-2xl font-bold border-b border-white">
             Belanja Berdasarkan Kategori
           </h2>
           <div className="grid grid-cols-3 lg:grid-cols-5 gap-4 py-4">

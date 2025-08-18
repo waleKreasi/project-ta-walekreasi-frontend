@@ -2,6 +2,8 @@ import { Outlet } from "react-router-dom";
 import { useState } from "react";
 import SellerSideBar from "./sidebar";
 import SellerDashboardHeader from "./header";
+import CustomerServiceButton from "../common/csButton";
+import InstallButton from "../common/installButton";
 
 function SellerDashboardLayout() {
   const [openSidebar, setOpenSidebar] = useState(false);
@@ -15,6 +17,10 @@ function SellerDashboardLayout() {
           <Outlet />
         </main>
       </div>
+      
+      <InstallButton/>
+      <CustomerServiceButton/>
+
     </div>
   );
 }

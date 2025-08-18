@@ -9,7 +9,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card";
-import Greeting from "@/components/admin/gretting";
+import Greeting from "@/components/common/gretting";
 
 function AdminDashboardPage() {
   const dispatch = useDispatch();
@@ -57,7 +57,13 @@ function AdminDashboardPage() {
 
   return (
     <div className="p-6 space-y-8 bg-gray-50 min-h-screen">
-      <Greeting />
+      <div>
+        <Greeting />
+        <p className="text-2xl text-gray-600 font-medium">
+          Admin Marketplace Walekreasi
+        </p>
+      </div>
+
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         
