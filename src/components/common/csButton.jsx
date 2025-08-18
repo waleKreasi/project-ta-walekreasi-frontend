@@ -26,7 +26,7 @@ const CustomerServiceButton = () => {
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="fixed bottom-6 md:bottom-6 right-8 z-50 flex items-center bg-accent text-white shadow-lg cursor-pointer rounded-full transition-all duration-300 ease-in-out overflow-hidden"
+      className="fixed bottom-20 md:bottom-6 right-6 z-50 flex items-center bg-accent text-white shadow-lg cursor-pointer rounded-full transition-all duration-300 ease-in-out overflow-hidden"
       style={{
         width: isHovered ? "200px" : "48px",
         height: "48px",
