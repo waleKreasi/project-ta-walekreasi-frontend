@@ -4,51 +4,31 @@ import logoWaleKreasi from "../../assets/logo-WaleKreasi.png";
 
 const sections = [
   {
-    title: "1. Kriteria Pendaftaran Seller",
+    title: "1. Kriteria Pengguna & Produk",
     items: [
-      "Warga Negara Indonesia (WNI).",
-      "Berdomisili di Provinsi Sulawesi Utara.",
-      "Memiliki usaha di bidang kerajinan lokal (seperti anyaman, ukiran, tenun, aksesori tradisional, dll).",
-      "Memiliki produk yang diproduksi atau dibuat sendiri di wilayah Sulawesi Utara.",
+      "Pengguna: Aplikasi ini ditujukan bagi Warga Negara Indonesia (WNI) yang berdomisili di Provinsi Sulawesi Utara dan memiliki usaha kerajinan lokal.",
+      "Produk: Produk yang diunggah harus merupakan hasil karya sendiri di wilayah Sulawesi Utara, mencerminkan nilai budaya dan kearifan lokal. Penjualan produk yang melanggar hukum atau mengandung unsur sensitif (SARA/pornografi) sangat dilarang."
     ],
   },
   {
-    title: "2. Ketentuan Produk",
+    title: "2. Akurasi Data dan Tanggung Jawab",
     items: [
-      "Produk yang dijual harus asli buatan sendiri, bukan hasil repacking atau reseller barang dari luar daerah.",
-      "Produk harus mencerminkan nilai budaya, kearifan lokal, dan keunikan Sulawesi Utara.",
-      "Memiliki usaha di bidang kerajinan lokal (seperti anyaman, ukiran, tenun, aksesori tradisional, dll).",
-      "Tidak diperbolehkan menjual produk yang melanggar hukum, atau mengandung unsur SARA/pornografi.",
+      "Data: Pengguna bertanggung jawab penuh atas kebenaran data pribadi dan deskripsi produk yang diunggah.",
+      "Pengiriman: Pengemasan, pengiriman, dan kualitas produk merupakan tanggung jawab penuh pengguna."
     ],
   },
   {
-    title: "3. Ketentuan Pengiriman dan Operasional",
+    title: "3. Hak dan Wewenang Pengelola Aplikasi",
     items: [
-      "Seller bertanggung jawab atas pengemasan, pengiriman, dan kualitas produk.",
-      "Seller diharapkan menjawab pertanyaan pembeli secara responsif.",
-    ],
-  },
-  {
-    title: "4. Akurasi dan Kebenaran Data",
-    items: [
-      "Calon seller bertanggung jawab penuh atas kebenaran data yang diberikan.",
-      "Pihak Marketplace Wale Kreasi berhak menolak, menangguhkan, atau menonaktifkan akun seller jika ditemukan data palsu atau tidak sesuai kriteria.",
-    ],
-  },
-  {
-    title: "5. Hak Marketplace Wale Kreasi",
-    items: [
-      "Pihak marketplace berhak melakukan verifikasi dan kurasi terhadap setiap produk yang didaftarkan.",
-      "Pihak marketplace dapat sewaktu-waktu mengubah ketentuan ini tanpa pemberitahuan terlebih dahulu.",
-      "Pihak marketplace berhak menonaktifkan akun seller yang melanggar ketentuan atau menerima banyak laporan negatif dari pembeli.",
+      "Pengelola berhak melakukan verifikasi dan kurasi terhadap setiap produk yang didaftarkan.",
+      "Pengelola berhak menangguhkan atau menonaktifkan akun pengguna jika ditemukan data palsu, pelanggaran ketentuan, atau menerima laporan negatif dari pembeli.",
+      "Syarat dan ketentuan ini dapat diubah atau diperbarui oleh pengelola tanpa pemberitahuan sebelumnya."
     ],
   },
   {
     title: "6. Persetujuan",
-    paragraph: "Dengan mendaftar sebagai seller, Anda dianggap telah:",
     items: [
-      "Membaca, memahami, dan menyetujui seluruh syarat dan ketentuan di atas.",
-      "Bersedia tunduk pada peraturan marketplace dan menjalankan usaha secara profesional dan jujur.",
+      "Dengan melanjutkan proses pendaftaran, Anda menyatakan telah membaca, memahami, dan menyetujui seluruh syarat dan ketentuan yang berlaku.",
     ],
   },
 ];
@@ -72,8 +52,7 @@ export default function TermsSection({ onAgree }) {
       </div>
       <div className="space-y-6 text-foreground max-h-96 overflow-y-auto text-justify text-base">
         <p>
-          Terima kasih telah berminat untuk menjadi Seller di platform kami. Dengan mendaftar sebagai Seller, Anda
-          menyetujui semua syarat dan ketentuan yang berlaku berikut ini:
+          Terima kasih telah berminat untuk menjadi Seller di platform kami :
         </p>
 
         {sections.map((section, idx) => (
