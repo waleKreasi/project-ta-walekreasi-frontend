@@ -13,7 +13,7 @@ export const fetchBanners = createAsyncThunk(
   "banner/fetchBanners",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await axios.get("https://project-ta-walekreasi-backend-production.up.railway.app/api/admin/banner", {
+      const res = await axios.get("https://project-ta-walekreasi-server-production.up.railway.app/api/admin/banner", {
         withCredentials: true,
       });
       return res.data.data;
@@ -29,7 +29,7 @@ export const uploadBanner = createAsyncThunk(
   async (formData, { rejectWithValue }) => {
     try {
       const res = await axios.post(
-        "https://project-ta-walekreasi-backend-production.up.railway.app/api/admin/banner/upload",
+        "https://project-ta-walekreasi-server-production.up.railway.app/api/admin/banner/upload",
         formData,
         {
           withCredentials: true,
@@ -49,7 +49,7 @@ export const deleteBanner = createAsyncThunk(
   "banner/deleteBanner",
   async (id, { rejectWithValue }) => {
     try {
-      await axios.delete(`https://project-ta-walekreasi-backend-production.up.railway.app/api/admin/banner/${id}`, {
+      await axios.delete(`https://project-ta-walekreasi-server-production.up.railway.app/api/admin/banner/${id}`, {
         withCredentials: true,
       });
       return id;

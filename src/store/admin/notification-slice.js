@@ -7,7 +7,7 @@ export const sendNotification = createAsyncThunk(
   async ({ title, body }, { rejectWithValue }) => {
     try {
       const res = await axios.post(
-        "https://project-ta-walekreasi-backend-production.up.railway.app/api/admin/notification/send-to-customers",
+        "https://project-ta-walekreasi-server-production.up.railway.app/api/admin/notification/send-to-customers",
         { title, body },
         { withCredentials: true }
       );
@@ -26,7 +26,7 @@ export const fetchNotificationHistory = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const res = await axios.get(
-        "https://project-ta-walekreasi-backend-production.up.railway.app/api/admin/notification/history",
+        "https://project-ta-walekreasi-server-production.up.railway.app/api/admin/notification/history",
         { withCredentials: true }
       );
       return res.data.notifications;
@@ -44,7 +44,7 @@ export const clearNotificationHistory = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const res = await axios.delete(
-        "https://project-ta-walekreasi-backend-production.up.railway.app/api/admin/notification/history/clear",
+        "https://project-ta-walekreasi-server-production.up.railway.app/api/admin/notification/history/clear",
         { withCredentials: true }
       );
       return res.data.message;

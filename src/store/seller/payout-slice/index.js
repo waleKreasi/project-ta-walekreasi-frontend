@@ -8,7 +8,7 @@ export const fetchSellerPayouts = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `https://project-ta-walekreasi-backend-production.up.railway.app/api/store/payout/my-payouts`,
+        `https://project-ta-walekreasi-server-production.up.railway.app/api/store/payout/my-payouts`,
         { withCredentials: true }
       );
 

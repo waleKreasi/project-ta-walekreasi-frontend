@@ -10,7 +10,7 @@ export const addNewProduct = createAsyncThunk(
   "/products/addnewproduct",
   async (formData) => {
     const result = await axios.post(
-      "https://project-ta-walekreasi-backend-production.up.railway.app/api/store/products/add",
+      "https://project-ta-walekreasi-server-production.up.railway.app/api/store/products/add",
       formData,
       {
         headers: {
@@ -28,7 +28,7 @@ export const fetchAllProducts = createAsyncThunk(
   "/products/fetchAllProducts",
   async () => {
     const result = await axios.get(
-      "https://project-ta-walekreasi-backend-production.up.railway.app/api/store/products/get",
+      "https://project-ta-walekreasi-server-production.up.railway.app/api/store/products/get",
       {
         withCredentials: true,
       }
@@ -42,7 +42,7 @@ export const editProduct = createAsyncThunk(
   "/products/editProduct",
   async ({ id, formData }) => {
     const result = await axios.put(
-      `https://project-ta-walekreasi-backend-production.up.railway.app/api/store/products/edit/${id}`,
+      `https://project-ta-walekreasi-server-production.up.railway.app/api/store/products/edit/${id}`,
       formData,
       {
         headers: {
@@ -60,7 +60,7 @@ export const deleteProduct = createAsyncThunk(
   "/products/deleteProduct",
   async (id) => {
     const result = await axios.delete(
-      `https://project-ta-walekreasi-backend-production.up.railway.app/api/store/products/delete/${id}`,
+      `https://project-ta-walekreasi-server-production.up.railway.app/api/store/products/delete/${id}`,
       {
         withCredentials: true,
       }

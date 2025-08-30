@@ -15,7 +15,7 @@ export const fetchAllSellers = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        "https://project-ta-walekreasi-backend-production.up.railway.app/api/admin/info/sellers",
+        "https://project-ta-walekreasi-server-production.up.railway.app/api/admin/info/sellers",
         { withCredentials: true }
       );
       return response.data.data;
@@ -31,7 +31,7 @@ export const fetchSellerById = createAsyncThunk(
   async (sellerId, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `https://project-ta-walekreasi-backend-production.up.railway.app/api/admin/info/seller/${sellerId}`,
+        `https://project-ta-walekreasi-server-production.up.railway.app/api/admin/info/seller/${sellerId}`,
         { withCredentials: true }
       );
       return response.data.data;

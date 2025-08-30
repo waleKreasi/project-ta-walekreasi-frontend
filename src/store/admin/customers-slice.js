@@ -5,7 +5,7 @@ export const fetchAllCustomers = createAsyncThunk(
   "admin/fetchAllCustomers",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get("https://project-ta-walekreasi-backend-production.up.railway.app/api/admin/info/customers", {
+      const response = await axios.get("https://project-ta-walekreasi-server-production.up.railway.app/api/admin/info/customers", {
         withCredentials: true,
       });
       return response.data.customers;

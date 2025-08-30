@@ -12,7 +12,7 @@ export const fetchSellerProfile = createAsyncThunk(
   "sellerProfile/fetch",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get("https://project-ta-walekreasi-backend-production.up.railway.app/api/store/profile/get", {
+      const response = await axios.get("https://project-ta-walekreasi-server-production.up.railway.app/api/store/profile/get", {
         withCredentials: true,
       });
       return response.data.data;
@@ -28,7 +28,7 @@ export const updateSellerProfile = createAsyncThunk(
   async (formData, { rejectWithValue }) => {
     try {
       const response = await axios.put(
-        "https://project-ta-walekreasi-backend-production.up.railway.app/api/store/profile/edit",
+        "https://project-ta-walekreasi-server-production.up.railway.app/api/store/profile/edit",
         formData,
         {
           headers: {
@@ -54,7 +54,7 @@ export const uploadStoreImage = createAsyncThunk(
       formData.append("my_file", file);
 
       const response = await axios.post(
-        "https://project-ta-walekreasi-backend-production.up.railway.app/api/store/profile/upload-image",
+        "https://project-ta-walekreasi-server-production.up.railway.app/api/store/profile/upload-image",
         formData,
         {
           headers: {

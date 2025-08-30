@@ -10,7 +10,7 @@ export const getSearchResults = createAsyncThunk(
   "/order/getSearchResults",
   async (keyword) => {
     const response = await axios.get(
-      `https://project-ta-walekreasi-backend-production.up.railway.app/api/shop/search/${keyword}`
+      `https://project-ta-walekreasi-server-production.up.railway.app/api/shop/search/${keyword}`
     );
 
     return response.data;

@@ -6,7 +6,7 @@ export const fetchAdminStats = createAsyncThunk(
   async () => {
     try {
       const res = await axios.get(
-        "https://project-ta-walekreasi-backend-production.up.railway.app/api/admin/dashboard/stats",
+        "https://project-ta-walekreasi-server-production.up.railway.app/api/admin/dashboard/stats",
         {
           withCredentials: true,
         }

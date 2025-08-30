@@ -6,7 +6,7 @@ export const fetchStoreBySellerId = createAsyncThunk(
   "store/fetchStoreBySellerId",
   async (sellerId, thunkAPI) => {
     try {
-      const response = await axios.get(`https://project-ta-walekreasi-backend-production.up.railway.app/api/shop/store/${sellerId}`);
+      const response = await axios.get(`https://project-ta-walekreasi-server-production.up.railway.app/api/shop/store/${sellerId}`);
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(

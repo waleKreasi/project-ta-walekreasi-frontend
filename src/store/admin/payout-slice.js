@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 // URL dasar API
-const API_URL = "https://project-ta-walekreasi-backend-production.up.railway.app/api";
+const API_URL = "https://project-ta-walekreasi-server-production.up.railway.app/api/";
 
 // Opsi konfigurasi umum untuk semua panggilan API yang memerlukan otentikasi
 // Ini akan memastikan cookie otentikasi disertakan

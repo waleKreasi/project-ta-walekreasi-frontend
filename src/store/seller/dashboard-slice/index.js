@@ -14,7 +14,7 @@ export const getSellerDashboardData = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `https://project-ta-walekreasi-backend-production.up.railway.app/api/store/dashboard`,
+        `https://project-ta-walekreasi-server-production.up.railway.app/api/store/dashboard`,
         { withCredentials: true }
       );
 

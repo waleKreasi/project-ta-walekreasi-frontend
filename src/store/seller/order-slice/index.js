@@ -14,7 +14,7 @@ export const getAllOrdersForSeller = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `https://project-ta-walekreasi-backend-production.up.railway.app/api/store/orders/get`,
+        `https://project-ta-walekreasi-server-production.up.railway.app/api/store/orders/get`,
         { withCredentials: true }
       );
 
@@ -36,7 +36,7 @@ export const getOrderDetailsForSeller = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `https://project-ta-walekreasi-backend-production.up.railway.app/api/store/orders/details/${id}`,
+        `https://project-ta-walekreasi-server-production.up.railway.app/api/store/orders/details/${id}`,
         { withCredentials: true }
       );
 
@@ -58,7 +58,7 @@ export const updateOrderStatus = createAsyncThunk(
   async ({ id, orderStatus }, { rejectWithValue }) => {
     try {
       const response = await axios.put(
-        `https://project-ta-walekreasi-backend-production.up.railway.app/api/store/orders/update/${id}`,
+        `https://project-ta-walekreasi-server-production.up.railway.app/api/store/orders/update/${id}`,
         { orderStatus },
         {
           headers: { "Content-Type": "application/json" },

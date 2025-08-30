@@ -11,7 +11,7 @@ export const registerUser = createAsyncThunk(
   "/auth/register",
   async (formData) => {
     const response = await axios.post(
-      "https://project-ta-walekreasi-backend-production.up.railway.app/api/auth/register",
+      "https://project-ta-walekreasi-server-production.up.railway.app/api/auth/register",
       formData,
       { withCredentials: true }
     );
@@ -23,7 +23,7 @@ export const registerSeller = createAsyncThunk(
   "/auth/register-seller",
   async (formData) => {
     const response = await axios.post(
-      "https://project-ta-walekreasi-backend-production.up.railway.app/api/auth/register-seller",
+      "https://project-ta-walekreasi-server-production.up.railway.app/api/auth/register-seller",
       formData,
       { withCredentials: true }
     );
@@ -35,7 +35,7 @@ export const loginUser = createAsyncThunk(
   "/auth/login",
   async (formData, { dispatch }) => {
     const response = await axios.post(
-      "https://project-ta-walekreasi-backend-production.up.railway.app/api/auth/login",
+      "https://project-ta-walekreasi-server-production.up.railway.app/api/auth/login",
       formData,
       { withCredentials: true }
     );
@@ -53,7 +53,7 @@ export const logoutUser = createAsyncThunk(
   "/auth/logout",
   async () => {
     const response = await axios.post(
-      "https://project-ta-walekreasi-backend-production.up.railway.app/api/auth/logout",
+      "https://project-ta-walekreasi-server-production.up.railway.app/api/auth/logout",
       {},
       { withCredentials: true }
     );
@@ -65,7 +65,7 @@ export const checkAuth = createAsyncThunk(
   "/auth/checkauth",
   async () => {
     const response = await axios.get(
-      "https://project-ta-walekreasi-backend-production.up.railway.app/api/auth/check-auth",  
+      "https://project-ta-walekreasi-server-production.up.railway.app/api/auth/check-auth",  
       {
         withCredentials: true,
         headers: {

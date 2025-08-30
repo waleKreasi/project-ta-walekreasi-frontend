@@ -13,7 +13,7 @@ export const createNewOrder = createAsyncThunk(
   "/order/createNewOrder",
   async (orderData) => {
     const response = await axios.post(
-      "https://project-ta-walekreasi-backend-production.up.railway.app/api/shop/order/create",
+      "https://project-ta-walekreasi-server-production.up.railway.app/api/shop/order/create",
       orderData
     );
 
@@ -25,7 +25,7 @@ export const getAllOrdersByUserId = createAsyncThunk(
   "/order/getAllOrdersByUserId",
   async (userId) => {
     const response = await axios.get(
-      `https://project-ta-walekreasi-backend-production.up.railway.app/api/shop/order/list/${userId}`
+      `https://project-ta-walekreasi-server-production.up.railway.app/api/shop/order/list/${userId}`
     );
 
     return response.data;
@@ -36,7 +36,7 @@ export const getOrderDetails = createAsyncThunk(
   "/order/getOrderDetails",
   async (id) => {
     const response = await axios.get(
-      `https://project-ta-walekreasi-backend-production.up.railway.app/api/shop/order/details/${id}`
+      `https://project-ta-walekreasi-server-production.up.railway.app/api/shop/order/details/${id}`
     );
 
     return response.data;

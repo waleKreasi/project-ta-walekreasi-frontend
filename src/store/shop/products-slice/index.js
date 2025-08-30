@@ -18,7 +18,7 @@ export const fetchAllFilteredProducts = createAsyncThunk(
     });
 
     const result = await axios.get(
-      `https://project-ta-walekreasi-backend-production.up.railway.app/api/shop/products/get?${query}`
+      `https://project-ta-walekreasi-server-production.up.railway.app/api/shop/products/get?${query}`
     );
 
     return result?.data;
@@ -30,7 +30,7 @@ export const fetchLatestProducts = createAsyncThunk(
   "/products/fetchLatestProducts",
   async () => {
     const result = await axios.get(
-      "https://project-ta-walekreasi-backend-production.up.railway.app/api/shop/products/get?sortBy=newest&limit=12"
+      "https://project-ta-walekreasi-server-production.up.railway.app/api/shop/products/get?sortBy=newest&limit=12"
     );
     return result?.data;
   }
@@ -41,7 +41,7 @@ export const fetchProductDetails = createAsyncThunk(
   "/products/fetchProductDetails",
   async (id) => {
     const result = await axios.get(
-      `https://project-ta-walekreasi-backend-production.up.railway.app/api/shop/products/get/${id}`
+      `https://project-ta-walekreasi-server-production.up.railway.app/api/shop/products/get/${id}`
     );
     return result?.data;
   }
