@@ -1,22 +1,18 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-// URL dasar API
-const API_URL = "https://project-ta-walekreasi-server-production.up.railway.app/api/";
-
-// Opsi konfigurasi umum untuk semua panggilan API yang memerlukan otentikasi
-// Ini akan memastikan cookie otentikasi disertakan
-const authConfig = {
+// axios instance dengan base URL + konfigurasi otentikasi
+const api = axios.create({
+  baseURL: "https://walekreasi-backend-thrid.onrender.com/api",
   withCredentials: true,
-};
+});
 
 // Action untuk mengambil daftar seller yang belum dibayar
 export const fetchUnpaidSellers = createAsyncThunk(
   "payout/fetchUnpaidSellers",
   async (_, { rejectWithValue }) => {
     try {
-      // ✅ Tidak perlu lagi mengambil token dari localStorage
-      const response = await axios.get(`${API_URL}/admin/payout/unpaid-sellers`, authConfig);
+      const response = await api.get("/admin/payout/unpaid-sellers");
       return response.data.data;
     } catch (err) {
       return rejectWithValue(err.response?.data?.message || err.message);
@@ -29,10 +25,7 @@ export const fetchUnpaidOrdersBySeller = createAsyncThunk(
   "payout/fetchUnpaidOrdersBySeller",
   async (sellerId, { rejectWithValue }) => {
     try {
-      const response = await axios.get(
-        `${API_URL}/admin/payout/unpaid-orders/${sellerId}`,
-        authConfig
-      );
+      const response = await api.get(`/admin/payout/unpaid-orders/${sellerId}`);
       return response.data.data;
     } catch (err) {
       return rejectWithValue(err.response?.data?.message || err.message);
@@ -45,11 +38,7 @@ export const markPaidToSeller = createAsyncThunk(
   "payout/markPaidToSeller",
   async (payoutData, { rejectWithValue }) => {
     try {
-      const response = await axios.post(
-        `${API_URL}/admin/payout/mark-paid`,
-        payoutData,
-        authConfig
-      );
+      const response = await api.post("/admin/payout/mark-paid", payoutData);
       return response.data.data;
     } catch (err) {
       return rejectWithValue(err.response?.data?.message || err.message);
@@ -62,7 +51,7 @@ export const fetchAllPayoutHistory = createAsyncThunk(
   "payout/fetchAllPayoutHistory",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${API_URL}/admin/payout/history/all`, authConfig);
+      const response = await api.get("/admin/payout/history/all");
       return response.data.data;
     } catch (err) {
       return rejectWithValue(err.response?.data?.message || err.message);
@@ -75,10 +64,7 @@ export const fetchPayoutHistoryBySeller = createAsyncThunk(
   "payout/fetchPayoutHistoryBySeller",
   async (sellerId, { rejectWithValue }) => {
     try {
-      const response = await axios.get(
-        `${API_URL}/admin/payout/history/${sellerId}`,
-        authConfig
-      );
+      const response = await api.get(`/admin/payout/history/${sellerId}`);
       return response.data.data;
     } catch (err) {
       return rejectWithValue(err.response?.data?.message || err.message);

@@ -1,16 +1,17 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
+// axios instance dengan base URL
+const api = axios.create({
+  baseURL: "https://walekreasi-backend-thrid.onrender.com",
+  withCredentials: true,
+});
+
 export const fetchAdminStats = createAsyncThunk(
   "adminDashboard/fetchStats",
   async () => {
     try {
-      const res = await axios.get(
-        "https://project-ta-walekreasi-server-production.up.railway.app/api/admin/dashboard/stats",
-        {
-          withCredentials: true,
-        }
-      );
+      const res = await api.get("/api/admin/dashboard/stats");
       // LOG UTAMA: Tampilkan payload yang diterima dari backend
       console.log("Payload yang diterima dari backend:", res.data.data);
       return res.data.data;

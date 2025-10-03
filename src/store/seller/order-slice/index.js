@@ -1,6 +1,14 @@
+// sellerOrderSlice.js
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
+// ✅ axios instance dengan baseURL baru
+const api = axios.create({
+  baseURL: "https://walekreasi-backend-thrid.onrender.com/api",
+  withCredentials: true,
+});
+
+// ✅ State awal
 const initialState = {
   orderList: [],
   orderDetails: null,
@@ -8,61 +16,54 @@ const initialState = {
   error: null,
 };
 
-// Ambil semua order milik seller
+// ✅ Ambil semua order milik seller
 export const getAllOrdersForSeller = createAsyncThunk(
   "order/getAllOrdersForSeller",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(
-        `https://project-ta-walekreasi-server-production.up.railway.app/api/store/orders/get`,
-        { withCredentials: true }
-      );
+      const response = await api.get("/store/orders/get");
 
       const resData = response.data;
       if (!resData.success) {
         return rejectWithValue(resData.message || "Gagal mengambil pesanan seller");
       }
 
-      return resData.data; // hanya kirim data orders
+      return resData.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || "Gagal mengambil pesanan seller");
     }
   }
 );
 
-// Detail order untuk seller
+// ✅ Ambil detail order seller
 export const getOrderDetailsForSeller = createAsyncThunk(
   "order/getOrderDetailsForSeller",
   async (id, { rejectWithValue }) => {
     try {
-      const response = await axios.get(
-        `https://project-ta-walekreasi-server-production.up.railway.app/api/store/orders/details/${id}`,
-        { withCredentials: true }
-      );
+      const response = await api.get(`/store/orders/details/${id}`);
 
       const resData = response.data;
       if (!resData.success) {
         return rejectWithValue(resData.message || "Gagal mengambil detail pesanan");
       }
 
-      return resData.data; // hanya kirim data order
+      return resData.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || "Gagal mengambil detail pesanan");
     }
   }
 );
 
-// Update status order
+// ✅ Update status order
 export const updateOrderStatus = createAsyncThunk(
   "order/updateOrderStatus",
   async ({ id, orderStatus }, { rejectWithValue }) => {
     try {
-      const response = await axios.put(
-        `https://project-ta-walekreasi-server-production.up.railway.app/api/store/orders/update/${id}`,
+      const response = await api.put(
+        `/store/orders/update/${id}`,
         { orderStatus },
         {
           headers: { "Content-Type": "application/json" },
-          withCredentials: true,
         }
       );
 
@@ -71,7 +72,6 @@ export const updateOrderStatus = createAsyncThunk(
         return rejectWithValue(resData.message || "Gagal memperbarui status");
       }
 
-      // karena backend hanya return success & message
       return { id, orderStatus };
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || "Gagal memperbarui status");
@@ -89,7 +89,7 @@ const sellerOrderSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Semua order seller
+      // 🔻 Semua order seller
       .addCase(getAllOrdersForSeller.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -103,7 +103,8 @@ const sellerOrderSlice = createSlice({
         state.orderList = [];
         state.error = action.payload;
       })
-      // Detail order seller
+
+      // 🔻 Detail order seller
       .addCase(getOrderDetailsForSeller.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -117,7 +118,8 @@ const sellerOrderSlice = createSlice({
         state.orderDetails = null;
         state.error = action.payload;
       })
-      // Update status order
+
+      // 🔻 Update status order
       .addCase(updateOrderStatus.fulfilled, (state, action) => {
         const { id, orderStatus } = action.payload;
         const idx = state.orderList.findIndex((o) => o._id === id);

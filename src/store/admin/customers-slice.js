@@ -1,13 +1,17 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
+// axios instance dengan base URL
+const api = axios.create({
+  baseURL: "https://walekreasi-backend-thrid.onrender.com",
+  withCredentials: true,
+});
+
 export const fetchAllCustomers = createAsyncThunk(
   "admin/fetchAllCustomers",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get("https://project-ta-walekreasi-server-production.up.railway.app/api/admin/info/customers", {
-        withCredentials: true,
-      });
+      const response = await api.get("/api/admin/info/customers");
       return response.data.customers;
     } catch (err) {
       return rejectWithValue(err.response?.data || err.message);

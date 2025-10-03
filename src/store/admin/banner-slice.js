@@ -1,6 +1,12 @@
 import { createSlice, createAsyncThunk, createSelector } from "@reduxjs/toolkit";
 import axios from "axios";
 
+// Buat axios instance dengan base URL
+const api = axios.create({
+  baseURL: "https://walekreasi-backend-thrid.onrender.com",
+  withCredentials: true,
+});
+
 // Initial State
 const initialState = {
   banners: [],
@@ -13,9 +19,7 @@ export const fetchBanners = createAsyncThunk(
   "banner/fetchBanners",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await axios.get("https://project-ta-walekreasi-server-production.up.railway.app/api/admin/banner", {
-        withCredentials: true,
-      });
+      const res = await api.get("/api/admin/banner");
       return res.data.data;
     } catch (err) {
       return rejectWithValue(err.response?.data?.message || err.message);
@@ -28,13 +32,9 @@ export const uploadBanner = createAsyncThunk(
   "banner/uploadBanner",
   async (formData, { rejectWithValue }) => {
     try {
-      const res = await axios.post(
-        "https://project-ta-walekreasi-server-production.up.railway.app/api/admin/banner/upload",
-        formData,
-        {
-          withCredentials: true,
-        }
-      );
+      const res = await api.post("/api/admin/banner/upload", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
       return res.data.data;
     } catch (err) {
       return rejectWithValue(err.response?.data?.message || err.message);
@@ -42,16 +42,12 @@ export const uploadBanner = createAsyncThunk(
   }
 );
 
-
-
 // Thunk untuk delete banner
 export const deleteBanner = createAsyncThunk(
   "banner/deleteBanner",
   async (id, { rejectWithValue }) => {
     try {
-      await axios.delete(`https://project-ta-walekreasi-server-production.up.railway.app/api/admin/banner/${id}`, {
-        withCredentials: true,
-      });
+      await api.delete(`/api/admin/banner/${id}`);
       return id;
     } catch (err) {
       return rejectWithValue(err.response?.data?.message || err.message);
@@ -66,6 +62,7 @@ const bannerSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      // fetch banners
       .addCase(fetchBanners.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -78,9 +75,13 @@ const bannerSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload;
       })
+
+      // upload banner
       .addCase(uploadBanner.fulfilled, (state, action) => {
         state.banners.unshift(action.payload);
       })
+
+      // delete banner
       .addCase(deleteBanner.fulfilled, (state, action) => {
         state.banners = state.banners.filter((b) => b._id !== action.payload);
       });

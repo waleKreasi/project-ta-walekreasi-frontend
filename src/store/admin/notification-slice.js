@@ -1,16 +1,21 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
+// axios instance dengan base URL
+const api = axios.create({
+  baseURL: "https://walekreasi-backend-thrid.onrender.com",
+  withCredentials: true,
+});
+
 // ✅ Kirim notifikasi
 export const sendNotification = createAsyncThunk(
   "notification/sendToCustomer",
   async ({ title, body }, { rejectWithValue }) => {
     try {
-      const res = await axios.post(
-        "https://project-ta-walekreasi-server-production.up.railway.app/api/admin/notification/send-to-customers",
-        { title, body },
-        { withCredentials: true }
-      );
+      const res = await api.post("/api/admin/notification/send-to-customers", {
+        title,
+        body,
+      });
       return res.data.message;
     } catch (error) {
       return rejectWithValue(
@@ -25,10 +30,7 @@ export const fetchNotificationHistory = createAsyncThunk(
   "notification/fetchHistory",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await axios.get(
-        "https://project-ta-walekreasi-server-production.up.railway.app/api/admin/notification/history",
-        { withCredentials: true }
-      );
+      const res = await api.get("/api/admin/notification/history");
       return res.data.notifications;
     } catch (error) {
       return rejectWithValue(
@@ -43,10 +45,7 @@ export const clearNotificationHistory = createAsyncThunk(
   "notification/clearHistory",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await axios.delete(
-        "https://project-ta-walekreasi-server-production.up.railway.app/api/admin/notification/history/clear",
-        { withCredentials: true }
-      );
+      const res = await api.delete("/api/admin/notification/history/clear");
       return res.data.message;
     } catch (error) {
       return rejectWithValue(

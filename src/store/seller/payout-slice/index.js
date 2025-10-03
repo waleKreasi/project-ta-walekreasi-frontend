@@ -2,23 +2,25 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-// Ambil data payout seller
+// ✅ axios instance dengan baseURL baru
+const api = axios.create({
+  baseURL: "https://walekreasi-backend-thrid.onrender.com/api",
+  withCredentials: true,
+});
+
+// 🔻 Ambil data payout seller
 export const fetchSellerPayouts = createAsyncThunk(
   "payout/fetchSellerPayouts",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(
-        `https://project-ta-walekreasi-server-production.up.railway.app/api/store/payout/my-payouts`,
-        { withCredentials: true }
-      );
+      const response = await api.get("/store/payout/my-payouts");
 
       const resData = response.data;
-
       if (!resData.success) {
         return rejectWithValue(resData.message || "Gagal memuat data payout");
       }
 
-      return resData.data; // ambil array payout
+      return resData.data; // ✅ ambil array payout
     } catch (err) {
       return rejectWithValue(
         err.response?.data?.message || "Gagal memuat data payout"

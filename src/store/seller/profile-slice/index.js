@@ -1,5 +1,12 @@
+// src/redux/slices/sellerProfileSlice.js
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+
+// ✅ axios instance dengan baseURL baru
+const api = axios.create({
+  baseURL: "https://walekreasi-backend-thrid.onrender.com/api",
+  withCredentials: true,
+});
 
 const initialState = {
   isLoading: false,
@@ -12,12 +19,10 @@ export const fetchSellerProfile = createAsyncThunk(
   "sellerProfile/fetch",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get("https://project-ta-walekreasi-server-production.up.railway.app/api/store/profile/get", {
-        withCredentials: true,
-      });
+      const response = await api.get("/store/profile/get");
       return response.data.data;
     } catch (error) {
-      return rejectWithValue(error.response.data.message);
+      return rejectWithValue(error.response?.data?.message || "Gagal memuat profil.");
     }
   }
 );
@@ -27,23 +32,17 @@ export const updateSellerProfile = createAsyncThunk(
   "sellerProfile/update",
   async (formData, { rejectWithValue }) => {
     try {
-      const response = await axios.put(
-        "https://project-ta-walekreasi-server-production.up.railway.app/api/store/profile/edit",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-          withCredentials: true,
-        }
-      );
+      const response = await api.put("/store/profile/edit", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       return response.data.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || "Gagal memperbarui profil.");
     }
   }
 );
-
 
 // [POST] Upload gambar logo/banner
 export const uploadStoreImage = createAsyncThunk(
@@ -53,16 +52,11 @@ export const uploadStoreImage = createAsyncThunk(
       const formData = new FormData();
       formData.append("my_file", file);
 
-      const response = await axios.post(
-        "https://project-ta-walekreasi-server-production.up.railway.app/api/store/profile/upload-image",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-          withCredentials: true,
-        }
-      );
+      const response = await api.post("/store/profile/upload-image", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       return response.data.result.secure_url;
     } catch (error) {
@@ -71,11 +65,17 @@ export const uploadStoreImage = createAsyncThunk(
   }
 );
 
-
+// 🔧 Slice
 const sellerProfileSlice = createSlice({
   name: "sellerProfile",
   initialState,
-  reducers: {},
+  reducers: {
+    clearSellerProfile: (state) => {
+      state.profile = null;
+      state.error = null;
+      state.isLoading = false;
+    },
+  },
   extraReducers: (builder) => {
     builder
       // FETCH
@@ -92,6 +92,7 @@ const sellerProfileSlice = createSlice({
         state.error = action.payload;
         state.profile = null;
       })
+
       // UPDATE
       .addCase(updateSellerProfile.pending, (state) => {
         state.isLoading = true;
@@ -105,20 +106,21 @@ const sellerProfileSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload;
       })
-       // UPLOAD IMAGE
+
+      // UPLOAD IMAGE
       .addCase(uploadStoreImage.pending, (state) => {
-      state.isLoading = true;
-      state.error = null;
+        state.isLoading = true;
+        state.error = null;
       })
       .addCase(uploadStoreImage.fulfilled, (state) => {
-      state.isLoading = false;
+        state.isLoading = false;
       })
       .addCase(uploadStoreImage.rejected, (state, action) => {
-      state.isLoading = false;
-      state.error = action.payload;
+        state.isLoading = false;
+        state.error = action.payload;
       });
-      
   },
 });
 
+export const { clearSellerProfile } = sellerProfileSlice.actions;
 export default sellerProfileSlice.reducer;

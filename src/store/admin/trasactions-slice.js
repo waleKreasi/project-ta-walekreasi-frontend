@@ -1,6 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
+// ✅ axios instance dengan baseURL baru
+const api = axios.create({
+  baseURL: "https://walekreasi-backend-thrid.onrender.com/api",
+  withCredentials: true,
+});
+
 // 🔄 State awal
 const initialState = {
   transactions: [],
@@ -14,10 +20,7 @@ export const fetchAllTransactions = createAsyncThunk(
   "admin/fetchAllTransactions",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(
-        "https://project-ta-walekreasi-server-production.up.railway.app/api/admin/info/transactions",
-        { withCredentials: true }
-      );
+      const response = await api.get("/admin/info/transactions");
       return response.data.data; // array transaksi
     } catch (err) {
       return rejectWithValue(err.response?.data?.message || err.message);
@@ -30,10 +33,7 @@ export const fetchTransactionById = createAsyncThunk(
   "admin/fetchTransactionById",
   async (transactionId, { rejectWithValue }) => {
     try {
-      const response = await axios.get(
-        `https://project-ta-walekreasi-server-production.up.railway.app/api/admin/info/transaction/${transactionId}`,
-        { withCredentials: true }
-      );
+      const response = await api.get(`/admin/info/transaction/${transactionId}`);
       return response.data.data; // detail transaksi
     } catch (err) {
       return rejectWithValue(err.response?.data?.message || err.message);

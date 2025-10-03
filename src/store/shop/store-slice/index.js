@@ -1,12 +1,18 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
+// ✅ Buat instance axios dengan baseURL baru
+const api = axios.create({
+  baseURL: "https://walekreasi-backend-thrid.onrender.com/api",
+  withCredentials: true,
+});
+
 // Async thunk untuk fetch data toko dari API
 export const fetchStoreBySellerId = createAsyncThunk(
   "store/fetchStoreBySellerId",
   async (sellerId, thunkAPI) => {
     try {
-      const response = await axios.get(`https://project-ta-walekreasi-server-production.up.railway.app/api/shop/store/${sellerId}`);
+      const response = await api.get(`/shop/store/${sellerId}`);
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(

@@ -2,21 +2,25 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
+// ✅ axios instance dengan baseURL baru
+const api = axios.create({
+  baseURL: "https://walekreasi-backend-thrid.onrender.com/api",
+  withCredentials: true,
+});
+
+// ✅ State Awal
 const initialState = {
   dashboardData: [],
   isLoading: false,
   error: null,
 };
 
-// Ambil data dashboard seller
+// ✅ Ambil data dashboard seller
 export const getSellerDashboardData = createAsyncThunk(
   "dashboard/getSellerDashboardData",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(
-        `https://project-ta-walekreasi-server-production.up.railway.app/api/store/dashboard`,
-        { withCredentials: true }
-      );
+      const response = await api.get("/store/dashboard");
 
       const resData = response.data;
       if (resData.status !== "success") {
