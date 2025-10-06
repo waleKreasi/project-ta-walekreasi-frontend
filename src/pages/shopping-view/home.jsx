@@ -128,8 +128,10 @@ function ShoppingHome() {
           landingBanners.map((slide, index) => (
             <div key={index}>
               <img
-                src={slide?.imageUrl}
+                src={`${slide?.imageUrl}?f_auto,q_auto`} // optimasi Cloudinary
                 alt={slide?.caption || "Banner"}
+                fetchpriority={index === currentSlide ? "high" : "auto"} // hanya slide aktif yang LCP
+                decoding="async"
                 className={`absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-1000 ${
                   index === currentSlide ? "opacity-100 z-10" : "opacity-0 z-0"
                 }`}
@@ -150,7 +152,7 @@ function ShoppingHome() {
         )}
 
         {!isLoadingBanners && landingBanners.length > 1 && (
-          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-30 flex gap-2">
+          <div className="p-2 absolute bottom-4 left-1/2 transform -translate-x-1/2 z-30 flex gap-2">
             {landingBanners.map((_, index) => (
               <button
                 key={index}
@@ -165,6 +167,7 @@ function ShoppingHome() {
           </div>
         )}
       </div>
+
 
       {/* 🧭 Category Section */}
       <section className="mt-6 bg-secondary/25 rounded-xl md:p-2 m-3 md:m-0">

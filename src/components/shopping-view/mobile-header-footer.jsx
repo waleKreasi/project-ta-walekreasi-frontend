@@ -40,20 +40,33 @@ export default function MobileHeaderFooterLayout({ children }) {
       {/* Fixed Header */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow flex items-center justify-between px-4 py-3">
         <div className="flex items-center gap-2">
-          <img src={logoWaleKreasi} alt="Logo" className="w-8 h-8" />
+          <img src={logoWaleKreasi} alt="Logo WaleKreasi" className="w-8 h-8" />
           <span className="text-lg font-semibold">WaleKreasi</span>
         </div>
 
         <div className="flex items-center gap-4">
-          <Link to="/shop/search">
-            <FiSearch className="w-6 h-6" />
+          {/* Search Button */}
+          <Link
+            to="/shop/search"
+            aria-label="Cari produk"
+            title="Cari produk"
+            className="p-2 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary"
+          >
+            <FiSearch className="w-6 h-6" aria-hidden="true" />
+            <span className="sr-only">Cari produk</span>
           </Link>
 
           {/* Sheet for Cart */}
           <Sheet open={openCart} onOpenChange={setOpenCart}>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="relative">
-                <FiShoppingCart className="w-6 h-6" />
+              <Button
+                variant="ghost"
+                size="icon"
+                className="relative"
+                aria-label="Buka keranjang belanja"
+                title="Keranjang belanja"
+              >
+                <FiShoppingCart className="w-6 h-6" aria-hidden="true" />
                 {totalItems > 0 && (
                   <span className="absolute -top-0 -right-0 bg-red-500 text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center">
                     {totalItems}
@@ -73,33 +86,35 @@ export default function MobileHeaderFooterLayout({ children }) {
 
       {/* Fixed Footer */}
       <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t shadow flex justify-around py-2">
-
         <Link
           to="/shop/home"
+          aria-label="Beranda"
           className={`flex flex-col items-center text-sm transition-colors ${
             currentPath === "/shop/home"
               ? "text-primary font-semibold"
               : "text-gray-500"
           }`}
         >
-          <FiHome className="w-5 h-5 mb-1" />
+          <FiHome className="w-5 h-5 mb-1" aria-hidden="true" />
           <span>Beranda</span>
         </Link>
 
         <Link
           to="/shop/listing"
+          aria-label="Belanja"
           className={`flex flex-col items-center text-sm transition-colors ${
             currentPath === "/shop/listing"
               ? "text-primary font-semibold"
               : "text-gray-500"
           }`}
         >
-          <ShoppingBag className="w-5 h-5 mb-1" />
+          <ShoppingBag className="w-5 h-5 mb-1" aria-hidden="true" />
           <span>Belanja</span>
         </Link>
 
         <Link
           to={isAuthenticated ? "/shop/account" : "/auth/login"}
+          aria-label={isAuthenticated ? "Akun saya" : "Masuk"}
           className={`flex flex-col items-center text-sm transition-colors ${
             currentPath.startsWith("/shop/account") || currentPath === "/auth/login"
               ? "text-primary font-semibold"
@@ -108,12 +123,12 @@ export default function MobileHeaderFooterLayout({ children }) {
         >
           {isAuthenticated ? (
             <>
-              <FiUser className="w-5 h-5 mb-1" />
+              <FiUser className="w-5 h-5 mb-1" aria-hidden="true" />
               <span>Saya</span>
             </>
           ) : (
             <>
-              <FiLogIn className="w-5 h-5 mb-1" />
+              <FiLogIn className="w-5 h-5 mb-1" aria-hidden="true" />
               <span>Masuk</span>
             </>
           )}

@@ -1,3 +1,4 @@
+// vite.config.js
 import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
@@ -13,8 +14,8 @@ export default defineConfig(({ mode }) => {
         registerType: "autoUpdate",
         injectRegister: "auto",
         devOptions: {
-          enabled: true, // 🔧 Aktifkan PWA saat development
-          type: "module"
+          enabled: true,
+          type: "module",
         },
         includeAssets: [
           "favicon.ico",
@@ -28,18 +29,24 @@ export default defineConfig(({ mode }) => {
           short_name: "WaleKreasi",
           description: "Marketplace Ragam Kerajinan Lokal Sulawesi Utara",
           start_url: "/",
+          scope: "/", 
           display: "standalone",
+          orientation: "portrait", 
           background_color: "#ffffff",
           theme_color: "#ffffff",
           icons: [
-            { src: "/icons/icon-72x72.png", sizes: "72x72", type: "image/png" },
-            { src: "/icons/icon-96x96.png", sizes: "96x96", type: "image/png" },
-            { src: "/icons/icon-128x128.png", sizes: "128x128", type: "image/png" },
-            { src: "/icons/icon-144x144.png", sizes: "144x144", type: "image/png" },
-            { src: "/icons/icon-152x152.png", sizes: "152x152", type: "image/png" },
-            { src: "/icons/icon-192x192.png", sizes: "192x192", type: "image/png" },
-            { src: "/icons/icon-384x384.png", sizes: "384x384", type: "image/png" },
-            { src: "/icons/icon-512x512.png", sizes: "512x512", type: "image/png" }
+            { src: "/icons/icon-72x72.png", sizes: "72x72", type: "image/png" }, 
+            { src: "/icons/icon-96x96.png", sizes: "96x96", type: "image/png" }, 
+            { src: "/icons/icon-128x128.png", sizes: "128x128", type: "image/png" }, 
+            { src: "/icons/icon-144x144.png", sizes: "144x144", type: "image/png" }, 
+            { src: "/icons/icon-152x152.png", sizes: "152x152", type: "image/png" }, 
+            { src: "/icons/icon-192x192.png", sizes: "192x192", type: "image/png" }, 
+            { src: "/icons/icon-384x384.png", sizes: "384x384", type: "image/png" }, 
+            { src: "/icons/icon-512x512.png", sizes: "512x512", type: "image/png", purpose:"maskable" }
+          ],
+          screenshots : [
+            { src: "/screenshots/screenshot-narrow.png", sizes: "390x844", type: "image/png", form_factor: "narrow"},
+            { src: "/screenshots/screenshot-wide.png", sizes: "1280x800", type: "image/png", form_factor: "wide" }
           ]
         },
         workbox: {
@@ -54,13 +61,11 @@ export default defineConfig(({ mode }) => {
                   maxEntries: 10,
                   maxAgeSeconds: 60 * 60 * 24 * 365,
                 },
-                cacheableResponse: {
-                  statuses: [0, 200],
-                },
+                cacheableResponse: { statuses: [0, 200] },
               },
             },
             {
-              urlPattern: new RegExp(`${env.API_BASE_URL}/api/.*`),
+              urlPattern: new RegExp(`${env.VITE_API_BASE_URL || "https://walekreasi-backend-thrid.onrender.com"}/api/.*`),
               handler: "NetworkFirst",
               options: {
                 cacheName: "api-cache",
@@ -69,9 +74,7 @@ export default defineConfig(({ mode }) => {
                   maxEntries: 100,
                   maxAgeSeconds: 60 * 60 * 24,
                 },
-                cacheableResponse: {
-                  statuses: [0, 200],
-                },
+                cacheableResponse: { statuses: [0, 200] },
               },
             }
           ]
