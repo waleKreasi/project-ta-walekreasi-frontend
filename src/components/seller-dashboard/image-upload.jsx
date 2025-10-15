@@ -52,7 +52,7 @@ function ProductImageUpload({
       data.append("my_file", imageFile);
   
       const response = await axios.post(
-        "https://project-ta-walekreasi-backend-production.up.railway.app/api/store/products/upload-image",
+        "https://walekreasi-backend-thrid.onrender.com/api/store/products/upload-image",
         data,
         {
           headers: {
