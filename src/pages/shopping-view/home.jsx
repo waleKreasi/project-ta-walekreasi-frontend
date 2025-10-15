@@ -14,18 +14,10 @@ import { addToCart, fetchCartItems } from "@/store/shop/cart-slice";
 import { useToast } from "@/components/ui/use-toast";
 import ProductDetailsDialog from "@/components/shopping-view/product-details";
 import ShoppingProductTile from "@/components/shopping-view/product-tile";
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Lamp,
-  Gift,
-  Shirt,
-  Brush,
-  Sprout,
-  MoveRight,
-} from "lucide-react";
+import { Lamp, Gift, Shirt, Brush, Sprout, MoveRight } from "lucide-react";
 
 const categoriesWithIcon = [
   { id: "home-decor", label: "Dekorasi Rumah", icon: Lamp },
@@ -36,9 +28,7 @@ const categoriesWithIcon = [
 ];
 
 function SkeletonBanner() {
-  return (
-    <Skeleton className="w-full h-full rounded-xl bg-gray-300" />
-  );
+  return <Skeleton className="w-full h-full rounded-xl bg-gray-300" />;
 }
 
 function SkeletonProductTile() {
@@ -63,7 +53,9 @@ function ShoppingHome() {
   const [isLoadingProducts, setIsLoadingProducts] = useState(true);
 
   const { user } = useSelector((state) => state.auth);
-  const { latestProducts, productDetails } = useSelector((state) => state.shopProducts);
+  const { latestProducts, productDetails } = useSelector(
+    (state) => state.shopProducts
+  );
   const landingBanners = useSelector(selectLandingBanners);
 
   useEffect(() => {
@@ -79,24 +71,26 @@ function ShoppingHome() {
   }, [productDetails]);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % landingBanners.length);
-    }, 3000);
-    return () => clearInterval(timer);
+    if (landingBanners.length > 1) {
+      const timer = setInterval(() => {
+        setCurrentSlide((prev) => (prev + 1) % landingBanners.length);
+      }, 3000);
+      return () => clearInterval(timer);
+    }
   }, [landingBanners]);
 
-  function handleNavigateToListingPage(item, section) {
+  const handleNavigateToListingPage = (item, section) => {
     sessionStorage.removeItem("filters");
     const filter = { [section]: [item.id] };
     sessionStorage.setItem("filters", JSON.stringify(filter));
     navigate(`/shop/listing`);
-  }
+  };
 
-  function handleGetProductDetails(productId) {
+  const handleGetProductDetails = (productId) => {
     dispatch(fetchProductDetails(productId));
-  }
+  };
 
-  function handleAddToCart(productId) {
+  const handleAddToCart = (productId) => {
     dispatch(
       addToCart({
         userId: user?.id,
@@ -109,14 +103,14 @@ function ShoppingHome() {
         toast({ title: "Produk berhasil dimasukkan ke keranjang" });
       }
     });
-  }
+  };
 
-  function handleDialogClose(isOpen) {
+  const handleDialogClose = (isOpen) => {
     if (!isOpen) {
       setOpenDetailsDialog(false);
       dispatch(setProductDetails());
     }
-  }
+  };
 
   return (
     <div className="md:container flex flex-col min-h-screen">
@@ -128,9 +122,9 @@ function ShoppingHome() {
           landingBanners.map((slide, index) => (
             <div key={index}>
               <img
-                src={`${slide?.imageUrl}?f_auto,q_auto`} // optimasi Cloudinary
-                alt={slide?.caption || "Banner"}
-                fetchpriority={index === currentSlide ? "high" : "auto"} // hanya slide aktif yang LCP
+                src={`${slide?.imageUrl}?f_auto,q_auto`}
+                alt={slide?.caption || `Banner ke-${index + 1}`}
+                fetchpriority={index === currentSlide ? "high" : "auto"}
                 decoding="async"
                 className={`absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-1000 ${
                   index === currentSlide ? "opacity-100 z-10" : "opacity-0 z-0"
@@ -151,23 +145,30 @@ function ShoppingHome() {
           </div>
         )}
 
+        {/* 🔘 Navigasi Banner (Accessible & Touch Friendly) */}
         {!isLoadingBanners && landingBanners.length > 1 && (
-          <div className="p-2 absolute bottom-4 left-1/2 transform -translate-x-1/2 z-30 flex gap-2">
+          <div
+            className="p-2 absolute bottom-4 left-1/2 transform -translate-x-1/2 z-30 flex gap-3"
+            role="group"
+            aria-label="Navigasi banner"
+          >
             {landingBanners.map((_, index) => (
               <button
                 key={index}
                 onClick={() => setCurrentSlide(index)}
-                className={`w-3 h-3 rounded-full border transition-all duration-300 ${
+                aria-label={`Tampilkan banner ke-${index + 1}`}
+                title={`Banner ${index + 1}`}
+                className={`w-4 h-4 md:w-5 md:h-5 p-2 flex items-center justify-center rounded-full border transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-white/70 ${
                   index === currentSlide
                     ? "bg-white border-white"
                     : "bg-white/50 border-white/50"
                 }`}
+                style={{ touchAction: "manipulation" }}
               />
             ))}
           </div>
         )}
       </div>
-
 
       {/* 🧭 Category Section */}
       <section className="mt-6 bg-secondary/25 rounded-xl md:p-2 m-3 md:m-0">
@@ -179,11 +180,20 @@ function ShoppingHome() {
             {categoriesWithIcon.map((item) => (
               <Card
                 key={item.id}
+                role="button"
+                tabIndex={0}
+                aria-label={`Lihat produk kategori ${item.label}`}
                 onClick={() => handleNavigateToListingPage(item, "category")}
-                className="cursor-pointer hover:shadow-lg transition-shadow"
+                onKeyDown={(e) =>
+                  e.key === "Enter" && handleNavigateToListingPage(item, "category")
+                }
+                className="cursor-pointer hover:shadow-lg transition-shadow focus:outline-none focus:ring-2 focus:ring-primary"
               >
                 <CardContent className="flex flex-col items-center justify-center text-center p-3 md:p-6">
-                  <item.icon className="w-6 h-6 md:w-12 md:h-12 mb-4 text-primary" />
+                  <item.icon
+                    className="w-6 h-6 md:w-12 md:h-12 mb-4 text-primary"
+                    aria-hidden="true"
+                  />
                   <span className="font-bold text-xs md:text-base">
                     {item.label}
                   </span>
@@ -222,10 +232,11 @@ function ShoppingHome() {
           <div className="mt-8">
             <Button
               onClick={() => navigate("/shop/listing")}
+              aria-label="Lihat semua produk"
               className="flex gap-2 hover:shadow-lg"
             >
               Lihat Semua
-              <MoveRight />
+              <MoveRight aria-hidden="true" />
             </Button>
           </div>
         </div>

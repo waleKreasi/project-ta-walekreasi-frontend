@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import logoWaleKreasi from "../../assets/logo-WaleKreasi.png";
+import logoWaleKreasi from "../../assets/logo-WaleKreasi.webp";
 
 const sections = [
   {

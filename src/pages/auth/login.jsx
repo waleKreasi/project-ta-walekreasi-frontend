@@ -7,7 +7,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { loginFormControls } from "@/config";
 import { loginUser } from "@/store/auth-slice";
 
-import logoWaleKreasi from "../../assets/logo-WaleKreasi.png";
+import logoWaleKreasi from "../../assets/logo-WaleKreasi.webp";
 
 const initialState = {
   email: "",

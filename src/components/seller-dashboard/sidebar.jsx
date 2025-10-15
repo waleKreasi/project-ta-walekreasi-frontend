@@ -14,7 +14,7 @@ import { logoutUser } from "@/store/auth-slice";
 
 import { Button } from "../ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "../ui/sheet";
-import logoWaleKreasi from "../../assets/logo-WaleKreasi.png";
+import logoWaleKreasi from "../../assets/logo-WaleKreasi.webp";
 
 // Array menu items untuk kemudahan modifikasi
 const sellerSidebarMenuItems = [

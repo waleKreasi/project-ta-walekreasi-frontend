@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import logoWaleKreasi from "../../assets/logo-WaleKreasi.png";
+import logoWaleKreasi from "../../assets/logo-WaleKreasi.webp";
 
 function AuthLayout() {
   return (

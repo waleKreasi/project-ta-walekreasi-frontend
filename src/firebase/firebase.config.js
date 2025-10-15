@@ -35,7 +35,7 @@ const requestForToken = async (userId) => {
       console.log("✅ FCM Token:", currentToken);
 
       try {
-        const res = await fetch("https://project-ta-walekreasi-backend-production.up.railway.app/api/notification/save-token", {
+        const res = await fetch("https://walekreasi-backend-thrid.onrender.com/api/notification/save-token", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

@@ -6,7 +6,7 @@ import { LayoutDashboard, Wallet, BarChartBig, Store, User2, Handshake, Settings
 
 import { Button } from "../ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "../ui/sheet";
-import logoWaleKreasi from "../../assets/logo-WaleKreasi.png";
+import logoWaleKreasi from "../../assets/logo-WaleKreasi.webp";
 
 // Struktur menu baru dengan pengelompokan
 const adminSidebarMenuGroups = [

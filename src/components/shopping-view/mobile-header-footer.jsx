@@ -9,7 +9,7 @@ import {
   FiLogIn,
 } from "react-icons/fi";
 import { Link, useLocation } from "react-router-dom";
-import logoWaleKreasi from "@/assets/logo-WaleKreasi.png";
+import logoWaleKreasi from "@/assets/logo-WaleKreasi.webp";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { Button } from "../ui/button";
 import UserCartWrapper from "./cart-wrapper";

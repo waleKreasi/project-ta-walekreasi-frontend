@@ -1,7 +1,7 @@
 import { useState } from "react";
 import TermsSection from "../../components/auth/sellerTerms";
 import AuthRegisterSeller from "../../components/auth/sellerRegisterForm";
-import logoWaleKreasi from "../../assets/logo-WaleKreasi.png";
+import logoWaleKreasi from "../../assets/logo-WaleKreasi.webp";
 
 export default function RegisterSeller() {
   const [agreed, setAgreed] = useState(false);

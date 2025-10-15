@@ -1,6 +1,6 @@
 import { FaFacebook, FaInstagramSquare } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import logoWaleKreasi from "../../assets/logo-WaleKreasi.png";
+import logoWaleKreasi from "../../assets/logo-WaleKreasi.webp";
 
 function Footer() {
   return (

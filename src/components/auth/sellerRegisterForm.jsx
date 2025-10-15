@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { registerSeller } from "@/store/auth-slice";
-import logoWaleKreasi from "../../assets/logo-WaleKreasi.png";
+import logoWaleKreasi from "../../assets/logo-WaleKreasi.webp";
 import { sellerRegisterFormControls } from "../../config/index.js";
 
 export default function AuthRegisterSeller() {
