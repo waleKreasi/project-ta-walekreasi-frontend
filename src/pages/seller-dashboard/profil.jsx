@@ -138,11 +138,7 @@ const SellerProfilePage = () => {
             </div>
             <div className="flex flex-col font-light">
               <span className="text-sm text-gray-500">Alamat Domisili</span>
-              <span className="text-base font-medium text-gray-800">{store.domicileAddress}</span>
-            </div>
-            <div className="flex flex-col font-light">
-              <span className="text-sm text-gray-500">NIK</span>
-              <span className="text-base font-medium text-gray-800">{store.nik}</span>
+              <span className="text-base font-medium text-gray-800">{store.domicileAddress}, {store.cityOrRegency}, {store.province}</span>
             </div>
           </div>
         </div>

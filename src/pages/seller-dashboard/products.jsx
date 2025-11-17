@@ -29,6 +29,7 @@ const initialFormData = {
   salePrice: "",
   totalStock: "",
   averageReview: 0,
+  weight : 100
 };
 
 function SellerProducts() {

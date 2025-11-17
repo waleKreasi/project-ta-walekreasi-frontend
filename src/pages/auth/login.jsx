@@ -27,24 +27,15 @@ function AuthLogin() {
   const onSubmit = async (event) => {
     event.preventDefault();
 
-    try {
-      const result = await dispatch(loginUser(formData));
+    const result = await dispatch(loginUser(formData));
 
-      if (result?.payload?.success) {
-        toast({
-          title: result.payload.message,
-        });
-        // ⏳ Navigasi akan dilakukan di useEffect setelah isAuthenticated true
-      } else {
-        toast({
-          title: result?.payload?.message || "Login gagal",
-          variant: "destructive",
-        });
-      }
-    } catch (error) {
+    if (result.meta.requestStatus === "fulfilled") {
       toast({
-        title: "Terjadi kesalahan saat login.",
-        description: error.message,
+        title: result.payload?.message || "Login berhasil",
+      });
+    } else {
+      toast({
+        title: result.payload?.message || "Email atau Password Salah",
         variant: "destructive",
       });
     }
@@ -58,19 +49,20 @@ function AuthLogin() {
 
       if (from && from !== "/auth/login") {
         navigate(from, { replace: true });
-      } else {
-        switch (role) {
-          case "seller":
-            navigate("/store/profile", { replace: true });
-            break;
-          case "admin":
-            navigate("/admin", { replace: true });
-            break;
-          case "customer":
-          default:
-            navigate("/shop/home", { replace: true });
-            break;
-        }
+        return;
+      }
+
+      switch (role) {
+        case "seller":
+          navigate("/store/profile", { replace: true });
+          break;
+        case "admin":
+          navigate("/admin", { replace: true });
+          break;
+        case "customer":
+        default:
+          navigate("/shop/home", { replace: true });
+          break;
       }
     }
   }, [isAuthenticated, user, navigate, location.state]);

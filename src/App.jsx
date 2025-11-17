@@ -27,6 +27,7 @@ import SellerProducts from "./pages/seller-dashboard/products";
 import SellerProfilePage from "./pages/seller-dashboard/profil";
 import SellerOrders from "./pages/seller-dashboard/orders";
 import SellerDetailPage from "./pages/admin/sellerDetail";
+import SellerShippingPage from "./pages/seller-dashboard/shipping";
 
 import AdminDashboardLayout from "./components/admin/layout";
 import PayoutPage from "./pages/admin/PayoutPage";
@@ -172,6 +173,7 @@ function App() {
           <Route path="profile" element={<SellerProfilePage />} />
           <Route path="products" element={<SellerProducts />} />
           <Route path="orders" element={<SellerOrders />} />
+          <Route path="shipping" element={<SellerShippingPage />} />
           <Route path="payouts" element={<SellerPayoutPage />} />
         </Route>
 

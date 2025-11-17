@@ -37,7 +37,7 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
     if (productDetails) {
       dispatch(getReviews(productDetails._id));
     }
-  }, [productDetails]);
+  }, [productDetails, dispatch]);
 
   const averageReview = reviews?.length
     ? reviews.reduce((sum, r) => sum + r.reviewValue, 0) / reviews.length
@@ -119,12 +119,20 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
             <span>{averageReview.toFixed(1)}</span>
           </div>
 
-          {/* Deskripsi */}
+          {/* Deskripsi & Berat Produk */}
           <div className="mt-4">
             <h2 className="text-sm font-semibold text-muted-foreground mb-1">Deskripsi:</h2>
             <p className="text-sm text-gray-700">
               {productDetails?.description || "Tidak ada deskripsi produk."}
             </p>
+
+            {/* 🟢 Berat Produk */}
+            {productDetails?.weight && (
+              <p className="text-sm text-gray-700 mt-2">
+                <span className="font-semibold">Berat: </span>
+                {productDetails.weight} gram
+              </p>
+            )}
           </div>
 
           {/* Toko */}

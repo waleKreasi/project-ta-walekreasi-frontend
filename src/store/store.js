@@ -20,6 +20,7 @@ import bannerSlice from "./admin/banner-slice";
 import notificationSlice from "./admin/notification-slice";
 import sellerDashboardSlice from "./seller/dashboard-slice";
 import sellerPayoutSlice from "./seller/payout-slice";
+import sellerShippingSlice from "./seller/shipping-slice";
 
 const store = configureStore({
   reducer: {
@@ -30,6 +31,7 @@ const store = configureStore({
     sellerProfile: sellerProfileSlice,
     sellerDashboard : sellerDashboardSlice,
     sellerPayout : sellerPayoutSlice,
+    shipping : sellerShippingSlice,
 
     shopProducts: shopProductsSlice,
     shopCart: shopCartSlice,

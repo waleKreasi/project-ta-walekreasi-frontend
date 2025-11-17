@@ -23,7 +23,7 @@ import { CirclePlus } from "lucide-react";
 const initialAddressFormData = {
   receiverName: "",
   address: "",
-  city: "",
+  cityOrRegency: "",
   phone: "",
   pincode: "",
   notes: "",
@@ -90,7 +90,7 @@ function Address({ setCurrentSelectedAddress, selectedId }) {
     setFormData({
       receiverName: address.receiverName,
       address: address.address,
-      city: address.city,
+      cityOrRegency: address.cityOrRegency,
       phone: address.phone,
       pincode: address.pincode,
       notes: address.notes,

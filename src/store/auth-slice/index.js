@@ -1,69 +1,127 @@
+// src/store/auth-slice.js
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-// ✅ axios instance dengan baseURL baru
+// ===============================
+// AXIOS INSTANCE
+// ===============================
 const api = axios.create({
   baseURL: "https://walekreasi-backend-thrid.onrender.com/api",
   withCredentials: true,
 });
 
-// 🔄 State awal
+// ===============================
+// INITIAL STATE
+// ===============================
 const initialState = {
   isAuthenticated: false,
   isLoading: true,
   user: null,
+  error: null,
 };
 
-// ✅ Register Customer
+// ===============================
+// REGISTER CUSTOMER
+// ===============================
 export const registerUser = createAsyncThunk(
   "/auth/register",
-  async (formData) => {
-    const response = await api.post("/auth/register", formData);
-    return response.data;
+  async (formData, { rejectWithValue }) => {
+    try {
+      const res = await api.post("/auth/register", formData);
+
+      if (!res.data.success) {
+        return rejectWithValue(res.data);
+      }
+
+      return res.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data || { message: "Gagal mendaftar" });
+    }
   }
 );
 
-// ✅ Register Seller
+// ===============================
+// REGISTER SELLER
+// ===============================
 export const registerSeller = createAsyncThunk(
   "/auth/register-seller",
-  async (formData) => {
-    const response = await api.post("/auth/register-seller", formData);
-    return response.data;
+  async (formData, { rejectWithValue }) => {
+    try {
+      const res = await api.post("/auth/register-seller", formData);
+
+      if (!res.data.success) {
+        return rejectWithValue(res.data);
+      }
+
+      return res.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data || { message: "Gagal mendaftar seller" });
+    }
   }
 );
 
-// ✅ Login
+// ===============================
+// LOGIN
+// ===============================
 export const loginUser = createAsyncThunk(
   "/auth/login",
-  async (formData, { dispatch }) => {
-    const response = await api.post("/auth/login", formData);
+  async (formData, { dispatch, rejectWithValue }) => {
+    try {
+      const res = await api.post("/auth/login", formData);
 
-    // 🔑 Setelah login sukses, langsung validasi session
-    if (response.data.success) {
+      if (!res.data.success) {
+        return rejectWithValue(res.data);
+      }
+
+      // Update session
       await dispatch(checkAuth());
-    }
 
-    return response.data;
+      return res.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data || { message: "Login gagal" });
+    }
   }
 );
 
-// ✅ Logout
-export const logoutUser = createAsyncThunk("/auth/logout", async () => {
-  const response = await api.post("/auth/logout", {});
-  return response.data;
-});
+// ===============================
+// LOGOUT
+// ===============================
+export const logoutUser = createAsyncThunk(
+  "/auth/logout",
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await api.post("/auth/logout");
 
-// ✅ Check Auth
-export const checkAuth = createAsyncThunk("/auth/checkauth", async () => {
-  const response = await api.get("/auth/check-auth", {
-    headers: {
-      "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
-    },
-  });
-  return response.data;
-});
+      return res.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data || { message: "Logout gagal" });
+    }
+  }
+);
 
-// 🔧 Slice
+// ===============================
+// CHECK AUTH (CEK SESSION)
+// ===============================
+export const checkAuth = createAsyncThunk(
+  "/auth/checkauth",
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await api.get("/auth/check-auth", {
+        headers: {
+          "Cache-Control": "no-store, no-cache",
+        },
+      });
+
+      return res.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data || { message: "Session invalid" });
+    }
+  }
+);
+
+// ===============================
+// AUTH SLICE
+// ===============================
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -75,53 +133,57 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Register User
+      // ==========================================
+      // REGISTER USER
+      // ==========================================
       .addCase(registerUser.pending, (state) => {
         state.isLoading = true;
+        state.error = null;
       })
       .addCase(registerUser.fulfilled, (state) => {
         state.isLoading = false;
-        state.user = null;
-        state.isAuthenticated = false;
       })
-      .addCase(registerUser.rejected, (state) => {
+      .addCase(registerUser.rejected, (state, action) => {
         state.isLoading = false;
-        state.user = null;
-        state.isAuthenticated = false;
+        state.error = action.payload?.message;
       })
 
-      // Register Seller
+      // ==========================================
+      // REGISTER SELLER
+      // ==========================================
       .addCase(registerSeller.pending, (state) => {
         state.isLoading = true;
+        state.error = null;
       })
       .addCase(registerSeller.fulfilled, (state) => {
         state.isLoading = false;
-        state.user = null;
-        state.isAuthenticated = false;
       })
-      .addCase(registerSeller.rejected, (state) => {
+      .addCase(registerSeller.rejected, (state, action) => {
         state.isLoading = false;
-        state.user = null;
-        state.isAuthenticated = false;
+        state.error = action.payload?.message;
       })
 
-      // Login
+      // ==========================================
+      // LOGIN
+      // ==========================================
       .addCase(loginUser.pending, (state) => {
         state.isLoading = true;
+        state.error = null;
       })
       .addCase(loginUser.fulfilled, (state) => {
         state.isLoading = false;
-        // user & auth status diperbarui oleh checkAuth
       })
-      .addCase(loginUser.rejected, (state) => {
+      .addCase(loginUser.rejected, (state, action) => {
         state.isLoading = false;
-        state.user = null;
-        state.isAuthenticated = false;
+        state.error = action.payload?.message;
       })
 
-      // Check Auth
+      // ==========================================
+      // CHECK AUTH
+      // ==========================================
       .addCase(checkAuth.pending, (state) => {
         state.isLoading = true;
+        state.error = null;
       })
       .addCase(checkAuth.fulfilled, (state, action) => {
         state.isLoading = false;
@@ -134,7 +196,9 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
       })
 
-      // Logout
+      // ==========================================
+      // LOGOUT
+      // ==========================================
       .addCase(logoutUser.pending, (state) => {
         state.isLoading = true;
       })
@@ -142,6 +206,9 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.user = null;
         state.isAuthenticated = false;
+      })
+      .addCase(logoutUser.rejected, (state) => {
+        state.isLoading = false;
       });
   },
 });

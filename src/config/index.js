@@ -31,126 +31,150 @@ export const registerFormControls = [
 
 ];
 
+
+export const sulutRegions = [
+  "Manado",
+  "Bitung",
+  "Tomohon",
+  "Kotamobagu",
+  "Minahasa",
+  "Minahasa Utara",
+  "Minahasa Selatan",
+  "Minahasa Tenggara",
+  "Bolaang Mongondow",
+  "Bolaang Mongondow Utara",
+  "Bolaang Mongondow Selatan",
+  "Bolaang Mongondow Timur",
+  "Kepulauan Sangihe",
+  "Kepulauan Talaud",
+  "Kepulauan Siau Tagulandang Biaro (Sitaro)",
+];
+
 export const sellerRegisterFormControls = [
-  // Data Diri Seller
+  // === Identitas Pemilik Usaha ===
   {
-    name: 'sellerName',
-    label: 'Nama Lengkap',
-    placeholder: 'Masukkan nama lengkap',
-    componentType: 'input',
-    type: 'text',
-    section: 'Identitas Pemilik Usaha',
+    name: "sellerName",
+    label: "Nama Lengkap",
+    placeholder: "Masukkan nama lengkap",
+    componentType: "input",
+    type: "text",
+    section: "Identitas Pemilik Usaha",
   },
   {
-    name: 'phoneNumber',
-    label: 'Nomor Telepon',
-    placeholder: 'Masukkan nomor telepon aktif',
-    componentType: 'input',
-    type: 'text',
-    section: 'Identitas Pemilik Usaha',
+    name: "phoneNumber",
+    label: "Nomor Telepon",
+    placeholder: "Masukkan nomor telepon aktif",
+    componentType: "input",
+    type: "text",
+    section: "Identitas Pemilik Usaha",
   },
   {
-    name: 'email',
-    label: 'Email',
-    placeholder: 'Masukkan email',
-    componentType: 'input',
-    type: 'email',
-    section: 'Identitas Pemilik Usaha',
+    name: "email",
+    label: "Email",
+    placeholder: "Masukkan email aktif",
+    componentType: "input",
+    type: "email",
+    section: "Identitas Pemilik Usaha",
+  },
+  {
+    name: "password",
+    label: "Kata Sandi",
+    placeholder: "Masukkan kata sandi",
+    componentType: "input",
+    type: "password",
+    section: "Identitas Pemilik Usaha",
+  },
+  {
+    name: "province",
+    label: "Provinsi",
+    placeholder: "Sulawesi Utara",
+    componentType: "select",
+    section: "Identitas Pemilik Usaha",
+    options: [{ label: "Sulawesi Utara", value: "Sulawesi Utara" }],
+    defaultValue: "Sulawesi Utara",
+  },
+  {
+    name: "cityOrRegency",
+    label: "Kota / Kabupaten",
+    placeholder: "Pilih kota atau kabupaten",
+    componentType: "select",
+    options: sulutRegions.map((region) => ({ label: region, value: region })),
+    section: "Identitas Pemilik Usaha",
+  },
+  {
+    name: "domicileAddress",
+    label: "Alamat Domisili",
+    placeholder: "Masukkan alamat domisili Anda",
+    componentType: "textarea",
+    section: "Identitas Pemilik Usaha",
   },
 
+  // === Data Usaha / Toko ===
   {
-    name : 'nik',
-    label :'NIK (Nomor Induk Kependudukan)',
-    placeholder :'Masukkan NIK anda',
-    componentType :'input',
-    type : 'number',
-    section: 'Identitas Pemilik Usaha',
+    name: "storeName",
+    label: "Nama Usaha / Toko",
+    placeholder: "Masukkan nama usaha",
+    componentType: "input",
+    type: "text",
+    section: "Data Usaha / Toko",
   },
   {
-    name: 'password',
-    label: 'Kata Sandi',
-    placeholder: 'Masukkan kata sandi',
-    componentType: 'input',
-    type: 'password',
-    section: 'Identitas Pemilik Usaha',
+    name: "productionAddress",
+    label: "Alamat Produksi",
+    placeholder: "Masukkan alamat tempat produksi",
+    componentType: "textarea",
+    section: "Data Usaha / Toko",
   },
   {
-    name : 'domicileAddress',
-    label :'Alamat Domisili',
-    placeholder :'Masukkan Alamat Domisili Anda',
-    componentType :'input',
-    type : 'text',
-    section: 'Identitas Pemilik Usaha',
+    name: "storeDescription",
+    label: "Deskripsi Usaha",
+    placeholder: "Deskripsikan usaha Anda",
+    componentType: "textarea",
+    section: "Data Usaha / Toko",
   },
 
-  // Data Usaha / Toko
+  // === Data Pembayaran ===
   {
-    name: 'storeName',
-    label: 'Nama Usaha / Toko',
-    placeholder: 'Masukkan nama usaha',
-    componentType: 'input',
-    type: 'text',
-    section: 'Data Usaha / Toko',
+    name: "bankAccountOwner",
+    label: "Nama Pemilik Rekening",
+    placeholder: "Masukkan nama pemilik rekening",
+    componentType: "input",
+    type: "text",
+    section: "Data Pembayaran",
   },
   {
-    name: 'productionAddress',
-    label: 'Alamat Produksi',
-    placeholder: 'Masukkan alamat tempat produksi',
-    componentType: 'input',
-    type: 'text',
-    section: 'Data Usaha / Toko',
+    name: "bankName",
+    label: "Nama Bank",
+    placeholder: "Masukkan nama bank",
+    componentType: "input",
+    type: "text",
+    note: "contoh bank: BCA, BNI, Mandiri",
+    section: "Data Pembayaran",
   },
   {
-    name: 'storeDescription',
-    label: 'Deskripsi Usaha',
-    placeholder: 'Deskripsikan usaha Anda',
-    componentType: 'textarea',
-    section: 'Data Usaha / Toko',
-  }
-,
-
-  // Data Pembayaran
-  {
-    name: 'bankAccountOwner',
-    label: 'Nama Pemilik Rekening',
-    placeholder: 'Masukkan nama pemilik rekening',
-    componentType: 'input',
-    type: 'text',
-    section: 'Data Pembayaran',
+    name: "bankAccountNumber",
+    label: "Nomor Rekening Bank",
+    placeholder: "Masukkan nomor rekening bank",
+    componentType: "input",
+    type: "text",
+    section: "Data Pembayaran",
   },
-  {
-    name: 'bankAccountNumber',
-    label: 'Nomor Rekening Bank',
-    placeholder: 'Masukkan nomor rekening',
-    componentType: 'input',
-    type: 'text',
-    section: 'Data Pembayaran',
-  },
-  {
-    name: 'bankName',
-    label: 'Nama Bank',
-    placeholder: 'Masukkan nama bank',
-    componentType: 'input',
-    type: 'text',
-    section: 'Data Pembayaran',
-  }
-
 ];
 
 export const sellerProfileFormElements = [
   { label: "Nama Lengkap", name: "sellerName", type: "text" },
   { label: "Nomor Telepon", name: "phoneNumber", type: "text" },
+  { label: "Email", name: "email", type: "email" },
+  { label: "Kata Sandi", name: "password", type: "password" },
   { label: "Alamat Domisili", name: "domicileAddress", type: "text" },
-  { label: "NIK", name: "nik", type: "text" },
+  { label: "Kota / Kabupaten", name: "cityOrRegency", type: "text" },
+  { label: "Provinsi", name: "province", type: "text", defaultValue: "Sulawesi Utara" },
   { label: "Nama Toko", name: "storeName", type: "text" },
   { label: "Deskripsi Toko", name: "storeDescription", type: "textarea" },
   { label: "Alamat Produksi", name: "productionAddress", type: "text" },
   { label: "Nama Pemilik Rekening", name: "bankAccountOwner", type: "text" },
   { label: "Nama Bank", name: "bankName", type: "text" },
   { label: "Nomor Rekening", name: "bankAccountNumber", type: "text" },
-  { label: "Dompet Digital", name: "eWallet", type: "text" },
-  { label: "Pemilik E-Wallet", name: "eWalletsAccountOwner", type: "text" },
-  { label: "Nomor E-Wallet", name: "eWalletAccountNumber", type: "text" },
 ];
 
 
@@ -212,12 +236,12 @@ export const addProductFormElements = [
     name: "category",
     componentType: "select",
     options: [
-        { id: "home-decor", label: "Dekorasi Rumah" },
-        { id: "accessories-fashion", label: "Aksesori & Fashion" },
-        { id: "souvenirs", label: "Souvenir & Oleh-Oleh" },
-        { id: "traditional-tools", label: "Peralatan Tradisional" },
-        { id: "eco-friendly", label: "Produk Ramah Lingkungan" },
-      ],
+      { id: "home-decor", label: "Dekorasi Rumah" },
+      { id: "accessories-fashion", label: "Aksesori & Fashion" },
+      { id: "souvenirs", label: "Souvenir & Oleh-Oleh" },
+      { id: "traditional-tools", label: "Peralatan Tradisional" },
+      { id: "eco-friendly", label: "Produk Ramah Lingkungan" },
+    ],
   },
   {
     label: "Harga",
@@ -240,7 +264,13 @@ export const addProductFormElements = [
     type: "number",
     placeholder: "Masukkan Jumlah Stok",
   },
+  { name: "weight", 
+    label: "Berat (gram)", 
+    type: "number", 
+    placeholder: "Masukkan Berat Produk (gram)",
+    required: true, min: 1, max: 100000 }
 ];
+
 
 export const shoppingViewHeaderMenuItems = [
   {
@@ -297,8 +327,8 @@ export const sortOptions = [
 
 export const addressFormControls = [
   {
-    label : "Nama Penerima",
-    name : "receiverName",
+    label: "Nama Penerima",
+    name: "receiverName",
     componentType: "input",
     type: "text",
     placeholder: "Masukkan Nama Penerima",
@@ -313,10 +343,13 @@ export const addressFormControls = [
   },
   {
     label: "Kota/Kabupaten",
-    name: "city",
-    componentType: "input",
-    type: "text",
-    placeholder: "Masukkan kota Anda",
+    name: "cityOrRegency",
+    placeholder: "Pilih kota atau kabupaten",
+    componentType: "select",
+    options: sulutRegions.map((region) => ({
+      id: region,      // menyesuaikan struktur CommonForm
+      label: region,   // tetap untuk tampilan
+    })),
   },
   {
     label: "Kode Pos",
@@ -326,7 +359,7 @@ export const addressFormControls = [
     placeholder: "Masukkan Kode Pos Anda",
   },
   {
-    label: "Nomor telepon",
+    label: "Nomor Telepon",
     name: "phone",
     componentType: "input",
     type: "text",

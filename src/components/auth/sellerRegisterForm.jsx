@@ -18,7 +18,10 @@ export default function AuthRegisterSeller() {
   ];
 
   const initialState = sellerRegisterFormControls.reduce(
-    (acc, field) => ({ ...acc, [field.name]: "" }),
+    (acc, field) => ({
+      ...acc,
+      [field.name]: field.defaultValue !== undefined ? field.defaultValue : "",
+    }),
     {}
   );
 
@@ -49,7 +52,11 @@ export default function AuthRegisterSeller() {
 
       if (
         !value &&
-        !["eWallet", "eWalletsAccountOwner", "eWalletAccountNumber"].includes(name)
+        ![
+          "eWallet",
+          "eWalletsAccountOwner",
+          "eWalletAccountNumber",
+        ].includes(name)
       ) {
         errors[name] = `${label} wajib diisi`;
       } else {
@@ -117,7 +124,11 @@ export default function AuthRegisterSeller() {
       {/* Logo & Judul */}
       <div className="flex flex-col items-center text-center">
         <div className="lg:hidden">
-          <img src={logoWaleKreasi} alt="Logo Wale Kreasi" className="h-20 w-20 mb-3" />
+          <img
+            src={logoWaleKreasi}
+            alt="Logo Wale Kreasi"
+            className="h-20 w-20 mb-3"
+          />
         </div>
         <h1 className="text-2xl font-bold text-gray-800 leading-snug">
           Pendaftaran Seller <br className="sm:hidden" /> WaleKreasi
@@ -143,52 +154,93 @@ export default function AuthRegisterSeller() {
       {/* Form */}
       <form onSubmit={onSubmit} className="space-y-8">
         <div className="grid grid-cols-1 gap-5">
-          {controlsToRender.map(({ name, label, placeholder, componentType, type }) => (
-            <div key={name}>
-              <label htmlFor={name} className="block mb-1 text-sm font-medium text-gray-700">
-                {label}
-              </label>
+          {controlsToRender.map(
+            ({ name, label, placeholder, componentType, type, options }) => (
+              <div key={name}>
+                <label
+                  htmlFor={name}
+                  className="block mb-1 text-sm font-medium text-gray-700"
+                >
+                  {label}
+                </label>
 
-              {componentType === "input" ? (
-                <>
-                  <input
-                    id={name}
-                    name={name}
-                    type={type || "text"}
-                    placeholder={placeholder}
-                    value={formData[name]}
-                    onChange={handleChange}
-                    className={`w-full rounded-md border px-3 py-2 text-sm transition focus:outline-none focus:ring-2 ${
-                      formErrors[name]
-                        ? "border-red-500 focus:ring-red-500"
-                        : "border-gray-300 focus:ring-primary focus:border-primary"
-                    }`}
-                  />
-                  {formErrors[name] && (
-                    <p className="mt-1 text-xs text-red-600">{formErrors[name]}</p>
-                  )}
-                </>
-              ) : componentType === "textarea" ? (
-                <>
-                  <textarea
-                    id={name}
-                    name={name}
-                    placeholder={placeholder}
-                    value={formData[name]}
-                    onChange={handleChange}
-                    className={`w-full rounded-md border px-3 py-2 text-sm resize-none min-h-[100px] transition focus:outline-none focus:ring-2 ${
-                      formErrors[name]
-                        ? "border-red-500 focus:ring-red-500"
-                        : "border-gray-300 focus:ring-primary focus:border-primary"
-                    }`}
-                  />
-                  {formErrors[name] && (
-                    <p className="mt-1 text-xs text-red-600">{formErrors[name]}</p>
-                  )}
-                </>
-              ) : null}
-            </div>
-          ))}
+                {componentType === "input" ? (
+                  <>
+                    <input
+                      id={name}
+                      name={name}
+                      type={type || "text"}
+                      placeholder={placeholder}
+                      value={formData[name]}
+                      onChange={handleChange}
+                      className={`w-full rounded-md border px-3 py-2 text-sm transition focus:outline-none focus:ring-2 ${
+                        formErrors[name]
+                          ? "border-red-500 focus:ring-red-500"
+                          : "border-gray-300 focus:ring-primary focus:border-primary"
+                      }`}
+                    />
+                    {formErrors[name] && (
+                      <p className="mt-1 text-xs text-red-600">
+                        {formErrors[name]}
+                      </p>
+                    )}
+                  </>
+                ) : componentType === "textarea" ? (
+                  <>
+                    <textarea
+                      id={name}
+                      name={name}
+                      placeholder={placeholder}
+                      value={formData[name]}
+                      onChange={handleChange}
+                      className={`w-full rounded-md border px-3 py-2 text-sm resize-none min-h-[100px] transition focus:outline-none focus:ring-2 ${
+                        formErrors[name]
+                          ? "border-red-500 focus:ring-red-500"
+                          : "border-gray-300 focus:ring-primary focus:border-primary"
+                      }`}
+                    />
+                    {formErrors[name] && (
+                      <p className="mt-1 text-xs text-red-600">
+                        {formErrors[name]}
+                      </p>
+                    )}
+                  </>
+                ) : componentType === "select" ? ( // ✅ Tambahkan logika untuk dropdown/select
+                  <>
+                    <select
+                      id={name}
+                      name={name}
+                      value={formData[name]}
+                      onChange={handleChange}
+                      className={`w-full rounded-md border px-3 py-2 text-sm transition focus:outline-none focus:ring-2 ${
+                        formErrors[name]
+                          ? "border-red-500 focus:ring-red-500"
+                          : "border-gray-300 focus:ring-primary focus:border-primary"
+                      }`}
+                    >
+                      {/* Opsi default/placeholder, hanya ditampilkan jika belum dipilih dan bukan provinsi yang sudah ada defaultValue */}
+                      {!formData[name] && (
+                        <option value="" disabled>
+                          {placeholder || `Pilih ${label}`}
+                        </option>
+                      )}
+                      {options &&
+                        options.map((option) => (
+                          <option key={option.value} value={option.value}>
+                            {option.label}
+                          </option>
+                        ))}
+                    </select>
+                    {formErrors[name] && (
+                      <p className="mt-1 text-xs text-red-600">
+                        {formErrors[name]}
+                      </p>
+                    )}
+                  </>
+                ) : null}
+              </div>
+            )
+          )}
         </div>
 
         {/* Tombol Navigasi */}
@@ -201,7 +253,9 @@ export default function AuthRegisterSeller() {
             >
               Kembali
             </button>
-          ) : <div />}
+          ) : (
+            <div />
+          )}
 
           {step < sections.length - 1 ? (
             <button
@@ -228,5 +282,4 @@ export default function AuthRegisterSeller() {
       </form>
     </div>
   );
-
 }

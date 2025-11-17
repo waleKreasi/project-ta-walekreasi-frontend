@@ -7,6 +7,7 @@ import {
   LayoutDashboardIcon,
   LogOut,
   ReceiptText,
+  Truck, // 🆕 ikon untuk ongkir
 } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -16,12 +17,13 @@ import { Button } from "../ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "../ui/sheet";
 import logoWaleKreasi from "../../assets/logo-WaleKreasi.webp";
 
-// Array menu items untuk kemudahan modifikasi
+// ✅ Tambah menu Ongkir di sini
 const sellerSidebarMenuItems = [
   { id: "dashboard", label: "Dashboard", path: "/store/dashboard", icon: <LayoutDashboardIcon /> },
   { id: "profile", label: "Profil", path: "/store/profile", icon: <UserCircle2 /> },
   { id: "products", label: "Produk", path: "/store/products", icon: <ShoppingBasket /> },
   { id: "orders", label: "Pesanan", path: "/store/orders", icon: <BadgeCheck /> },
+  { id: "shipping", label: "Ongkir", path: "/store/shipping", icon: <Truck /> }, // 🆕 menu baru
   // { id: "payout", label: "Pembayaran", path: "/store/payouts", icon: <ReceiptText /> },
 ];
 
@@ -33,41 +35,42 @@ function SellerSideBar({ open, setOpen }) {
 
   function handleLogout() {
     dispatch(logoutUser());
-    // Redirect ke halaman login setelah logout
     navigate("/auth/login"); 
   }
 
-  // Komponen MenuItems internal
   const MenuItems = ({ onNavigate }) => (
     <nav className="flex-col flex gap-2">
-      {sellerSidebarMenuItems.map((menuItem) => (
-        <div
-          key={menuItem.id}
-          onClick={() => {
-            navigate(menuItem.path);
-            if (onNavigate) onNavigate();
-          }}
-          // Menghapus kondisi untuk membuat semua item menu terlihat sama
-          className="relative flex cursor-pointer items-center gap-3 rounded-md px-3 py-2 transition-colors duration-200 text-muted-foreground hover:bg-accent hover:text-white"
-        >
-          {React.cloneElement(menuItem.icon, { className: "h-5 w-5" })}
-          <span>{menuItem.label}</span>
-        </div>
-      ))}
+      {sellerSidebarMenuItems.map((menuItem) => {
+        const isActive = location.pathname === menuItem.path;
+        return (
+          <div
+            key={menuItem.id}
+            onClick={() => {
+              navigate(menuItem.path);
+              if (onNavigate) onNavigate();
+            }}
+            className={`relative flex cursor-pointer items-center gap-3 rounded-md px-3 py-2 transition-colors duration-200 ${
+              isActive
+                ? "bg-accent text-white"
+                : "text-muted-foreground hover:bg-accent hover:text-white"
+            }`}
+          >
+            {React.cloneElement(menuItem.icon, { className: "h-5 w-5" })}
+            <span>{menuItem.label}</span>
+          </div>
+        );
+      })}
     </nav>
   );
 
   return (
-    <React.Fragment>
-      {/* Sidebar untuk mobile (Sheet) */}
+    <>
+      {/* Sidebar untuk mobile */}
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetContent side="left" className="w-64 flex flex-col">
           <SheetHeader className="pb-4">
-            {/* Header untuk mobile */}
             <SheetTitle className="flex items-center gap-2 mt-5">
-              <img src={logoWaleKreasi} 
-                   alt="Logo Walekreasi"
-                   className="h-7 w-7" />
+              <img src={logoWaleKreasi} alt="Logo Walekreasi" className="h-7 w-7" />
               <div className="flex flex-col items-start">
                 <h1 className="text-xl font-extrabold text-gray-900 leading-none">
                   {store?.storeName || "Store Dashboard"}
@@ -97,14 +100,11 @@ function SellerSideBar({ open, setOpen }) {
 
       {/* Sidebar untuk desktop */}
       <aside className="hidden w-64 flex-col border-r bg-background p-6 lg:flex">
-        {/* Header untuk desktop */}
         <div
           onClick={() => navigate("/")}
           className="flex cursor-pointer items-center justify-center pb-4 border-b space-x-2"
         >
-          <img src={logoWaleKreasi} 
-                alt="Logo Walekreasi"
-                className="h-8 w-8" />
+          <img src={logoWaleKreasi} alt="Logo Walekreasi" className="h-8 w-8" />
           <div className="flex flex-col items-start">
             <h1 className="text-xl font-extrabold text-gray-900 leading-none">
               {store?.storeName || "Store Dashboard"}
@@ -127,7 +127,7 @@ function SellerSideBar({ open, setOpen }) {
           </div>
         </div>
       </aside>
-    </React.Fragment>
+    </>
   );
 }
 
