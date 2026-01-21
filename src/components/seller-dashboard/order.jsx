@@ -75,7 +75,7 @@ function SellerOrdersView() {
   }
 
   return (
-    <Card>
+    <Card className="bg-background">
       <CardHeader>
         <CardTitle className="text-2xl flex gap-2 px-4 items-center font-bold font-primary border-b-2 py-2">
           <ReceiptText className="w-7 h-7" />

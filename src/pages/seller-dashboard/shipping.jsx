@@ -89,7 +89,7 @@ export default function SellerShippingPage() {
 
   return (
     <Fragment>
-      <div className="rounded-xl shadow-sm border bg-white p-6">
+      <div className="rounded-xl shadow-sm border bg-background p-6">
         <div className="mb-6">
           {/* HEADER TITLE */}
           <div className="flex items-center gap-3 pb-3 border-b-2 border-gray-200">

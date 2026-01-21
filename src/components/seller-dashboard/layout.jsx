@@ -13,7 +13,7 @@ function SellerDashboardLayout() {
       <SellerSideBar open={openSidebar} setOpen={setOpenSidebar} />
       <div className="flex flex-1 flex-col">
         <SellerDashboardHeader setOpen={setOpenSidebar} />
-        <main className="flex-1 flex-col flex bg-muted/40 p-4 md:p-6">
+        <main className="flex-1 flex-col flex bg-secondary/25 p-4 md:p-6">
           <Outlet />
         </main>
       </div>

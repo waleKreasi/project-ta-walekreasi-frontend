@@ -21,7 +21,7 @@ function UserCartWrapper({ setOpenCartSheet }) {
   }, 0);
 
   return (
-    <SheetContent className="sm:max-w-md">
+    <SheetContent className="sm:max-w-md bg-background">
       <SheetHeader>
         <SheetTitle>Keranjang Anda</SheetTitle>
       </SheetHeader>

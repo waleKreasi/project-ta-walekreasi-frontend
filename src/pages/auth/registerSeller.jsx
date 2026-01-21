@@ -29,10 +29,14 @@ export default function RegisterSeller() {
       <div className="w-full lg:w-1/2 flex items-center justify-center px-4 sm:px-8 py-12">
         <div className="w-full max-w-3xl">
           {agreed ? (
-            <AuthRegisterSeller />
+            <AuthRegisterSeller agreedToTerms={agreed}  />
           ) : (
             <div className="max-h-[85vh] overflow-y-auto pr-2">
-              <TermsSection onAgree={() => setAgreed(true)} />
+              <TermsSection
+                agreed={agreed}
+                setAgreed={setAgreed}
+                onAgree={() => setAgreed(true)}
+              />
             </div>
           )}
         </div>

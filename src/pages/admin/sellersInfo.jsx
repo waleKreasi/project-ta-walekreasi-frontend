@@ -18,85 +18,157 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Store, Eye, Loader2 } from "lucide-react";
+import { Store, Eye, Loader2, Phone, Calendar } from "lucide-react";
 
 function SellersInfoPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  
-  const { sellers, isLoading, error } = useSelector((state) => state.sellersInfo);
+
+  const { sellers, isLoading, error } = useSelector(
+    (state) => state.sellersInfo
+  );
 
   useEffect(() => {
     dispatch(fetchAllSellers());
   }, [dispatch]);
-  
-  // Tampilan saat loading
+
+  /* ================= LOADING ================= */
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-48">
-        <Loader2 className="h-8 w-8 animate-spin text-gray-500" />
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
       </div>
     );
   }
 
   return (
-    <div className="p-4">
-      <Card className="shadow-lg rounded-xl overflow-hidden">
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 p-6 bg-gray-50 border-b">
-          <div className="flex items-center space-x-3">
-            <Store className="h-6 w-6 text-gray-700" />
-            <CardTitle className="text-2xl font-bold text-gray-800">Manajemen Seller</CardTitle>
-          </div>
+    <div className="p-4 md:p-6 space-y-6">
+      <Card className="shadow-md border-0 rounded-xl overflow-hidden">
+        <CardHeader className="flex flex-row items-center gap-3 bg-slate-50 border-b">
+          <Store className="h-6 w-6 text-slate-700" />
+          <CardTitle className="text-xl md:text-2xl font-bold">
+            Daftar Seller
+          </CardTitle>
         </CardHeader>
+
         <CardContent className="p-0">
           {error ? (
-            <p className="text-red-500 text-center p-6">Terjadi kesalahan: {error}</p>
+            <p className="text-red-500 text-center p-6">
+              Terjadi kesalahan: {error}
+            </p>
           ) : (
-            <Table>
-              <TableHeader className="bg-gray-100">
-                <TableRow className="hover:bg-gray-100">
-                  <TableHead className="font-bold text-gray-700">Nama Toko</TableHead>
-                  <TableHead className="font-bold text-gray-700">Email</TableHead>
-                  <TableHead className="font-bold text-gray-700">Status</TableHead>
-                  <TableHead className="font-bold text-gray-700">Tanggal Bergabung</TableHead>
-                  <TableHead className="font-bold text-gray-700 text-center">Aksi</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {sellers?.length > 0 ? (
-                  sellers.map((seller) => (
-                    <TableRow key={seller._id} className="hover:bg-gray-50 transition-colors">
-                      <TableCell className="p-4 border-b font-medium text-gray-600">{seller.storeName}</TableCell>
-                      <TableCell className="p-4 border-b font-semibold text-gray-800">{seller.email}</TableCell>
-                      <TableCell className="p-4 border-b">
-                        <Badge variant="outline" className="text-sm font-semibold text-green-600 border-green-600">Aktif</Badge>
-                      </TableCell>
-                      <TableCell className="p-4 border-b text-gray-600">
-                        {format(new Date(seller.createdAt), 'dd/MM/yyyy')}
-                      </TableCell>
-                      <TableCell className="p-4 border-b text-center">
-                        <Button
-                          onClick={() => navigate(`/admin/seller/${seller._id}`)}
-                          variant="outline"
-                          size="sm"
-                          className="text-xs"
+            <>
+              {/* ================= DESKTOP TABLE ================= */}
+              <div className="hidden md:block">
+                <Table>
+                  <TableHeader className="bg-slate-100">
+                    <TableRow>
+                      <TableHead>Nama Toko</TableHead>
+                      <TableHead>Telepon</TableHead>
+                      <TableHead>Tanggal Bergabung</TableHead>
+                      <TableHead className="text-center">
+                        Aksi
+                      </TableHead>
+                    </TableRow>
+                  </TableHeader>
+
+                  <TableBody>
+                    {sellers?.length ? (
+                      sellers.map((seller) => (
+                        <TableRow
+                          key={seller._id}
+                          className="hover:bg-slate-50 transition"
                         >
-                          <Eye className="h-3 w-3 mr-2" />
+                          <TableCell className="font-medium">
+                            {seller.storeName}
+                          </TableCell>
+                          <TableCell>
+                            {seller.phoneNumber || "-"}
+                          </TableCell>
+                          <TableCell>
+                            {format(
+                              new Date(seller.createdAt),
+                              "dd/MM/yyyy"
+                            )}
+                          </TableCell>
+                          <TableCell className="text-center">
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() =>
+                                navigate(
+                                  `/admin/seller/${seller._id}`
+                                )
+                              }
+                            >
+                              <Eye className="h-4 w-4 mr-2" />
+                              Detail
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    ) : (
+                      <TableRow>
+                        <TableCell
+                          colSpan={5}
+                          className="text-center py-10 text-muted-foreground"
+                        >
+                          Belum ada seller terdaftar.
+                        </TableCell>
+                      </TableRow>
+                    )}
+                  </TableBody>
+                </Table>
+              </div>
+
+              {/* ================= MOBILE CARD ================= */}
+              <div className="md:hidden space-y-4 p-4">
+                {sellers?.length ? (
+                  sellers.map((seller) => (
+                    <Card
+                      key={seller._id}
+                      className="border shadow-sm rounded-xl"
+                    >
+                      <CardContent className="p-4 space-y-3">
+                        <div className="flex items-center justify-between">
+                          <h3 className="font-semibold text-base">
+                            {seller.storeName}
+                          </h3>
+                        </div>
+
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                          <Phone className="h-4 w-4" />
+                          {seller.phoneNumber || "-"}
+                        </div>
+
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                          <Calendar className="h-4 w-4" />
+                          {format(
+                            new Date(seller.createdAt),
+                            "dd/MM/yyyy"
+                          )}
+                        </div>
+
+                        <Button
+                          size="sm"
+                          className="w-full mt-2"
+                          onClick={() =>
+                            navigate(`/admin/seller/${seller._id}`)
+                          }
+                        >
+                          <Eye className="h-4 w-4 mr-2" />
                           Lihat Profil
                         </Button>
-                      </TableCell>
-                    </TableRow>
+                      </CardContent>
+                    </Card>
                   ))
                 ) : (
-                  <TableRow>
-                    <TableCell colSpan={5} className="text-center py-10 text-gray-500">
-                      Belum ada seller terdaftar.
-                    </TableCell>
-                  </TableRow>
+                  <p className="text-center text-muted-foreground py-10">
+                    Belum ada seller terdaftar.
+                  </p>
                 )}
-              </TableBody>
-            </Table>
+              </div>
+            </>
           )}
         </CardContent>
       </Card>

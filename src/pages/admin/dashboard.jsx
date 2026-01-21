@@ -19,7 +19,7 @@ function AdminDashboardPage() {
     totalRevenue,
     totalOrders,
     loading,
-    error, // Menambahkan state error
+    error,
   } = useSelector((state) => state.adminDashboard);
 
   useEffect(() => {
@@ -27,9 +27,7 @@ function AdminDashboardPage() {
   }, [dispatch]);
 
   const formatRupiah = (number) => {
-    if (typeof number !== 'number' || isNaN(number)) {
-      return "Rp 0";
-    }
+    if (!number) return "Rp 0";
     return new Intl.NumberFormat("id-ID", {
       style: "currency",
       currency: "IDR",
@@ -37,26 +35,26 @@ function AdminDashboardPage() {
     }).format(number);
   };
 
-  // Menangani state loading
   if (loading) {
     return (
-      <div className="flex h-screen items-center justify-center bg-gray-50">
+      <div className="flex h-screen items-center justify-center">
         <Loader2 className="h-10 w-10 animate-spin text-blue-500" />
       </div>
     );
   }
 
-  // Menangani state error
   if (error) {
     return (
-      <div className="flex h-screen items-center justify-center text-red-500 bg-gray-50 p-4 text-center">
-        <p>Error: Gagal memuat data dashboard. Silakan coba lagi.</p>
+      <div className="flex h-screen items-center justify-center p-4 text-center">
+        <p className="text-red-500 font-medium">
+          Terjadi kesalahan saat memuat dashboard. Silakan coba lagi.
+        </p>
       </div>
     );
   }
 
   return (
-    <div className="p-6 space-y-8 bg-gray-50 min-h-screen">
+    <div className="p-6 space-y-8 min-h-screen">
       <div>
         <Greeting />
         <p className="text-2xl text-gray-600 font-medium">
@@ -64,54 +62,64 @@ function AdminDashboardPage() {
         </p>
       </div>
 
-
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        
-        {/* Kartu Pendapatan - Warna Hijau */}
+        {/* Total Pendapatan */}
         <Card className="hover:shadow-xl transition-shadow duration-300 rounded-xl overflow-hidden shadow-md">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4 bg-gradient-to-r from-green-500 to-green-600">
-            <CardTitle className="text-md font-semibold text-white">Total Pendapatan</CardTitle>
+            <CardTitle className="text-md font-semibold text-white">
+              Total Pendapatan
+            </CardTitle>
             <DollarSign className="h-6 w-6 text-white" />
           </CardHeader>
           <CardContent className="p-4 bg-white">
-            <div className="text-3xl font-bold text-gray-900 mt-2">{formatRupiah(totalRevenue || 0)}</div>
-            <p className="text-sm text-gray-500 mt-1">Minggu ini</p>
+            <div className="text-3xl font-bold text-gray-900 mt-2">
+              {formatRupiah(totalRevenue)}
+            </div>
           </CardContent>
         </Card>
 
-        {/* Kartu Pesanan - Warna Biru */}
+        {/* Total Pesanan */}
         <Card className="hover:shadow-xl transition-shadow duration-300 rounded-xl overflow-hidden shadow-md">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4 bg-gradient-to-r from-blue-500 to-blue-600">
-            <CardTitle className="text-md font-semibold text-white">Total Pesanan</CardTitle>
+            <CardTitle className="text-md font-semibold text-white">
+              Total Pesanan
+            </CardTitle>
             <ShoppingCart className="h-6 w-6 text-white" />
           </CardHeader>
           <CardContent className="p-4 bg-white">
-            <div className="text-3xl font-bold text-gray-900 mt-2">{totalOrders || 0}</div>
-            <p className="text-sm text-gray-500 mt-1">Minggu ini</p>
+            <div className="text-3xl font-bold text-gray-900 mt-2">
+              {totalOrders ?? 0}
+            </div>
           </CardContent>
         </Card>
 
-        {/* Kartu Seller - Warna Ungu */}
+        {/* Total Seller */}
         <Card className="hover:shadow-xl transition-shadow duration-300 rounded-xl overflow-hidden shadow-md">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4 bg-gradient-to-r from-purple-500 to-purple-600">
-            <CardTitle className="text-md font-semibold text-white">Seller Terdaftar</CardTitle>
+            <CardTitle className="text-md font-semibold text-white">
+              Seller Terdaftar
+            </CardTitle>
             <Store className="h-6 w-6 text-white" />
           </CardHeader>
           <CardContent className="p-4 bg-white">
-            <div className="text-3xl font-bold text-gray-900 mt-2">{sellerCount || 0}</div>
-            <p className="text-sm text-gray-500 mt-1">Total</p>
+            <div className="text-3xl font-bold text-gray-900 mt-2">
+              {sellerCount ?? 0}
+            </div>
           </CardContent>
         </Card>
 
-        {/* Kartu Pelanggan - Warna Oranye */}
+        {/* Total Customer */}
         <Card className="hover:shadow-xl transition-shadow duration-300 rounded-xl overflow-hidden shadow-md">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4 bg-gradient-to-r from-orange-500 to-orange-600">
-            <CardTitle className="text-md font-semibold text-white">Pelanggan</CardTitle>
+            <CardTitle className="text-md font-semibold text-white">
+              Pelanggan Terdaftar
+            </CardTitle>
             <User className="h-6 w-6 text-white" />
           </CardHeader>
           <CardContent className="p-4 bg-white">
-            <div className="text-3xl font-bold text-gray-900 mt-2">{customerCount || 0}</div>
-            <p className="text-sm text-gray-500 mt-1">Total</p>
+            <div className="text-3xl font-bold text-gray-900 mt-2">
+              {customerCount ?? 0}
+            </div>
           </CardContent>
         </Card>
       </div>

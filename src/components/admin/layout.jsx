@@ -11,7 +11,7 @@ function AdminDashboardLayout() {
       <AdminSidebar open={openSidebar} setOpen={setOpenSidebar} />
       <div className="flex flex-1 flex-col">
         <AdminDashboardHeader setOpen={setOpenSidebar} />
-        <main className="flex-1 flex-col flex bg-muted/40 p-4 md:p-6">
+        <main className="flex-1 flex-col flex p-4 md:p-6 bg-secondary/25">
           <Outlet />
         </main>
       </div>

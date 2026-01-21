@@ -10,7 +10,7 @@ import { loginUser } from "@/store/auth-slice";
 import logoWaleKreasi from "../../assets/logo-WaleKreasi.webp";
 
 const initialState = {
-  email: "",
+  identifier: "",
   password: "",
 };
 
@@ -21,13 +21,31 @@ function AuthLogin() {
   const location = useLocation();
   const { toast } = useToast();
 
-  const { user, isAuthenticated, isLoading } = useSelector((state) => state.auth);
+  const { user, isAuthenticated, isLoading } = useSelector(
+    (state) => state.auth
+  );
 
-  // ⏳ Submit form login
+  // ===============================
+  // SUBMIT LOGIN
+  // ===============================
   const onSubmit = async (event) => {
     event.preventDefault();
 
-    const result = await dispatch(loginUser(formData));
+    if (!formData.identifier || !formData.password) {
+      toast({
+        title: "Lengkapi data login",
+        description: "Email / nomor telepon dan password wajib diisi",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const result = await dispatch(
+      loginUser({
+        identifier: formData.identifier,
+        password: formData.password,
+      })
+    );
 
     if (result.meta.requestStatus === "fulfilled") {
       toast({
@@ -35,16 +53,18 @@ function AuthLogin() {
       });
     } else {
       toast({
-        title: result.payload?.message || "Email atau Password Salah",
+        title: result.payload?.message || "Login gagal",
         variant: "destructive",
       });
     }
   };
 
-  // ✅ Redirect setelah user berhasil login
+  // ===============================
+  // REDIRECT SETELAH LOGIN
+  // ===============================
   useEffect(() => {
     if (isAuthenticated && user) {
-      const role = user?.role;
+      const role = user.role;
       const from = location.state?.from?.pathname;
 
       if (from && from !== "/auth/login") {
@@ -69,18 +89,26 @@ function AuthLogin() {
 
   return (
     <div className="x-auto w-full max-w-md space-y-8 px-4">
-      {/* Logo & Branding (mobile) */}
+      {/* Logo & Branding */}
       <div className="flex flex-col md:hidden items-center justify-center">
-        <img src={logoWaleKreasi} alt="Logo Wale Kreasi" className="w-14 h-14" />
+        <img
+          src={logoWaleKreasi}
+          alt="Logo Wale Kreasi"
+          className="w-14 h-14"
+        />
         <div className="text-center">
           <h1 className="text-xl font-bold text-gray-800">Wale Kreasi</h1>
-          <p className="text-sm text-gray-500">Belanja Kreasi Lokal Lebih Praktis</p>
+          <p className="text-sm text-gray-500">
+            Belanja Kreasi Lokal Lebih Praktis
+          </p>
         </div>
       </div>
 
       <div className="max-w-md mx-auto mt-10 p-8 bg-white border border-gray-200 rounded-xl shadow-xl">
         <div className="space-y-2 text-left mb-8">
-          <h1 className="text-2xl font-semibold text-gray-900">Masuk ke Akun Anda</h1>
+          <h1 className="text-2xl font-semibold text-gray-900">
+            Masuk ke Akun Anda
+          </h1>
           <p className="text-sm text-gray-600">
             Belum punya akun?
             <Link

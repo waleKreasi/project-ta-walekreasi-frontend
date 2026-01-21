@@ -24,12 +24,15 @@ import { useEffect, useState } from "react";
 import { fetchCartItems } from "@/store/shop/cart-slice";
 import { Label } from "../ui/label";
 import logoWaleKreasi from "../../assets/logo-WaleKreasi.webp";
+import { toast, useToast } from "@/components/ui/use-toast";
+
 
 // Menu navigasi utama
 function MenuItems() {
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
+  const { toast } = useToast();
 
   function handleNavigate(getCurrentMenuItem) {
     sessionStorage.removeItem("filters");
@@ -85,8 +88,28 @@ function HeaderRightContent() {
   }, [dispatch, user?.id]);
 
   const handleLogout = () => {
-    dispatch(logoutUser());
+    toast({
+      title: "Konfirmasi Logout",
+      description: "Apakah kamu yakin ingin keluar?",
+      action: (
+        <Button
+          variant="destructive"
+          size="sm"
+          onClick={() => {
+            dispatch(logoutUser());
+            toast({
+              title: "Logout berhasil",
+              description: "Sampai jumpa kembali 👋",
+            });
+            navigate("/shop/home");
+          }}
+        >
+          Keluar
+        </Button>
+      ),
+    });
   };
+  
 
   return (
     <div className="flex items-center gap-6">

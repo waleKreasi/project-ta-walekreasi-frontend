@@ -208,7 +208,7 @@ const SellerProfilePage = () => {
           <div className="flex-1 py-6 text-black space-y-4">
             {(!store.storeLogoUrl || !store.storeBannerUrl) && (
               <div className="bg-yellow-100 text-yellow-800 border border-yellow-300 p-3 rounded-md text-sm">
-                ⚠️ Lengkapi profil toko Anda dengan <strong>mengunggah logo dan banner toko</strong> untuk meningkatkan kepercayaan pembeli.
+                ⚠️ Lengkapi profil toko Anda dengan
               </div>
             )}
 

@@ -162,41 +162,39 @@ export const sellerRegisterFormControls = [
 ];
 
 export const sellerProfileFormElements = [
-  { label: "Nama Lengkap", name: "sellerName", type: "text" },
-  { label: "Nomor Telepon", name: "phoneNumber", type: "text" },
-  { label: "Email", name: "email", type: "email" },
+  { label: "Nama Lengkap", name: "sellerName", type: "text" }, 
+  { label: "Nomor Telepon", name: "phoneNumber", type: "text" }, 
+  { label: "Email", name: "email", type: "email" }, 
   { label: "Kata Sandi", name: "password", type: "password" },
-  { label: "Alamat Domisili", name: "domicileAddress", type: "text" },
-  { label: "Kota / Kabupaten", name: "cityOrRegency", type: "text" },
-  { label: "Provinsi", name: "province", type: "text", defaultValue: "Sulawesi Utara" },
-  { label: "Nama Toko", name: "storeName", type: "text" },
+  { label: "Alamat Domisili", name: "domicileAddress", type: "text"}, 
+  { label: "Kota / Kabupaten", name: "cityOrRegency", type: "text"}, 
+  { label: "Provinsi", name: "province", type: "text", defaultValue: "Sulawesi Utara" }, 
+  { label: "Nama Toko", name: "storeName", type: "text"}, 
   { label: "Deskripsi Toko", name: "storeDescription", type: "textarea" },
   { label: "Alamat Produksi", name: "productionAddress", type: "text" },
   { label: "Nama Pemilik Rekening", name: "bankAccountOwner", type: "text" },
   { label: "Nama Bank", name: "bankName", type: "text" },
-  { label: "Nomor Rekening", name: "bankAccountNumber", type: "text" },
+  { label: "Nomor Rekening", name: "bankAccountNumber", type: "text" }
+ 
 ];
-
-
 
 export const loginFormControls = [
   {
-      name : 'email' ,
-      label : 'Email', 
-      placeholder :'Masukkan Email Anda' ,
-      componentType : 'input' , 
-      type : 'email'   
+    name: "identifier",
+    label: "Email atau Nomor Telepon",
+    type: "text",
+    placeholder: "Masukkan email atau nomor telepon",
+    required: true,
   },
   {
-      name : 'password' ,
-      label : 'Kata Sandi', 
-      placeholder :'Masukkan Kata Sandi' ,
-      componentType : 'input' , 
-      type : 'password'   
-  }
+    name: "password",
+    label: "Kata Sandi",
+    type: "password",
+    placeholder: "Masukkan kata sandi",
+    required: true,
+  },
+];
 
-
-]
 
 export const adminSideBarMenuItems = [
   {

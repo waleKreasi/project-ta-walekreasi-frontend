@@ -33,8 +33,7 @@ const sections = [
   },
 ];
 
-export default function TermsSection({ onAgree }) {
-  const [agreed, setAgreed] = useState(false);
+export default function TermsSection({ agreed, setAgreed, onAgree }) {
 
   return (
     <div className="w-full space-y-14">

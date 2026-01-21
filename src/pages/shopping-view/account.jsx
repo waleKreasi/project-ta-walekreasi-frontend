@@ -24,7 +24,9 @@ import {
 } from "@/components/ui/card";
 import ShoppingOrders from "@/components/shopping-view/orders";
 import Address from "@/components/shopping-view/address";
-import { CircleUser, ShoppingBag, MapPin, LogOut, Store } from "lucide-react";
+import { CircleUser, ShoppingBag, MapPin, LogOut, Store,  User, Mail, Phone} from "lucide-react";
+import { toast } from "@/components/ui/use-toast";
+import { Button } from "@/components/ui/button";
 
 const tabNavs = [
   { key: "pesanan", label: "Riwayat Pesanan", Icon: ShoppingBag },
@@ -58,7 +60,26 @@ export default function CustomerProfileTabs() {
   const backgroundImage = customerBanners?.[0]?.imageUrl;
 
   const handleLogout = () => {
-    dispatch(logoutUser());
+    toast({
+      title: "Konfirmasi Logout",
+      description: "Apakah kamu yakin ingin keluar?",
+      action: (
+        <Button
+          variant="destructive"
+          size="sm"
+          onClick={() => {
+            dispatch(logoutUser());
+            toast({
+              title: "Logout berhasil",
+              description: "Sampai jumpa kembali 👋",
+            });
+            navigate("/shop/home");
+          }}
+        >
+          Keluar
+        </Button>
+      ),
+    });
   };
 
   useEffect(() => {
@@ -124,7 +145,7 @@ export default function CustomerProfileTabs() {
           </div>
         )}
 
-        <div className="absolute bottom-6 left-4 md:left-12 bg-secondary/70 text-accent px-4 py-2 rounded-lg text-xl md:text-3xl font-semibold shadow-lg backdrop-blur-sm">
+        <div className="absolute bottom-3 left-4 md:left-12 bg-gray-50/70 text-accent px-4 py-2 rounded-lg text-xl md:text-3xl font-semibold shadow-lg backdrop-blur-sm">
           Halo, {user?.name || "Pengguna"}! 👋
         </div>
       </div>
@@ -155,20 +176,44 @@ export default function CustomerProfileTabs() {
             <CardHeader>
               <CardTitle className="text-lg md:text-xl font-semibold text-primary">Biodata Pengguna</CardTitle>
             </CardHeader>
-            <CardContent className="grid grid-cols-1 gap-4">
-              <div>
-                <p className="text-gray-600 text-sm md:text-base font-light">Nama:</p>
-                <p className="text-primary font-medium text-base md:text-lg">{user?.name}</p>
-              </div>
-              <div>
-                <p className="text-gray-600 text-sm md:text-base font-light">Email:</p>
-                <p className="text-primary font-medium text-base md:text-lg">{user?.email}</p>
-              </div>
-              <div>
-                <p className="text-gray-600 text-sm md:text-base font-light">Nomor Telepon:</p>
-                <p className="text-primary font-medium text-base md:text-lg">{user?.phoneNumber || "-"}</p>
-              </div>
+            <CardContent className="space-y-4">
+  <div className="flex items-center gap-3 rounded-lg border bg-muted/30 p-4">
+    <User className="h-5 w-5 text-muted-foreground" />
+    <div className="flex-1">
+      <p className="text-xs uppercase tracking-wide text-muted-foreground">
+        Nama
+      </p>
+      <p className="text-primary font-semibold text-base md:text-lg">
+        {user?.name}
+      </p>
+    </div>
+  </div>
+
+  <div className="flex items-center gap-3 rounded-lg border bg-muted/30 p-4">
+    <Mail className="h-5 w-5 text-muted-foreground" />
+    <div className="flex-1">
+      <p className="text-xs uppercase tracking-wide text-muted-foreground">
+        Email
+      </p>
+      <p className="text-primary font-semibold text-base md:text-lg break-all">
+        {user?.email}
+      </p>
+    </div>
+  </div>
+
+  <div className="flex items-center gap-3 rounded-lg border bg-muted/30 p-4">
+    <Phone className="h-5 w-5 text-muted-foreground" />
+    <div className="flex-1">
+      <p className="text-xs uppercase tracking-wide text-muted-foreground">
+        Nomor Telepon
+      </p>
+      <p className="text-primary font-semibold text-base md:text-lg">
+        {user?.phoneNumber || "-"}
+      </p>
+    </div>
+  </div>
             </CardContent>
+
           </Card>
         </TabsContent>
 

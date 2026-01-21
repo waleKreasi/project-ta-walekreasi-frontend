@@ -100,7 +100,7 @@ function SellerProducts() {
 
   return (
     <Fragment>
-      <div className="rounded-lg shadow-md p-4 border ">
+      <div className="rounded-lg shadow-md p-4 border bg-background ">
         {/* Header */}
         <div className="mb-5 flex flex-col md:flex-row justify-between md:items-center px-4 py-3 border-b-2  sticky top-0 z-10 space-y-4 md:space-y-0">
           <div className="flex gap-2 items-center">

@@ -1,117 +1,194 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { registerSeller } from "@/store/auth-slice";
 import logoWaleKreasi from "../../assets/logo-WaleKreasi.webp";
-import { sellerRegisterFormControls } from "../../config/index.js";
+import { sellerProfileFormElements } from "../../config";
 
-export default function AuthRegisterSeller() {
+export default function AuthRegisterSeller({ agreedToTerms }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const sections = [
-    "Identitas Pemilik Usaha",
-    "Data Usaha / Toko",
-    "Data Pembayaran",
-  ];
-
-  const initialState = sellerRegisterFormControls.reduce(
-    (acc, field) => ({
-      ...acc,
-      [field.name]: field.defaultValue !== undefined ? field.defaultValue : "",
-    }),
-    {}
+  // =========================
+  // KONFIGURASI STEP
+  // =========================
+  const sections = useMemo(
+    () => ["Identitas Pemilik Usaha", "Data Usaha / Toko"],
+    []
   );
+
+  const sectionFields = useMemo(
+    () => ({
+      "Identitas Pemilik Usaha": [
+        "sellerName",
+        "phoneNumber",
+        "email",
+        "password",
+        "domicileAddress",
+        "cityOrRegency",
+        "province",
+      ],
+      "Data Usaha / Toko": [
+        "storeName",
+        "storeDescription",
+        "productionAddress",
+      ],
+    }),
+    []
+  );
+
+  // =========================
+  // STATE
+  // =========================
+  const initialState = useMemo(() => {
+    return sellerProfileFormElements.reduce((acc, field) => {
+      acc[field.name] = field.defaultValue || "";
+      return acc;
+    }, {});
+  }, []);
 
   const [formData, setFormData] = useState(initialState);
   const [formErrors, setFormErrors] = useState({});
   const [step, setStep] = useState(0);
   const [submitting, setSubmitting] = useState(false);
 
+  const isLastStep = step === sections.length - 1;
   const currentSection = sections[step];
-  const controlsToRender = sellerRegisterFormControls.filter(
-    (control) => control.section === currentSection
+
+  const controlsToRender = sellerProfileFormElements.filter((field) =>
+    sectionFields[currentSection].includes(field.name)
   );
 
+  // =========================
+  // HANDLE CHANGE
+  // =========================
   function handleChange(e) {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     setFormErrors((prev) => ({ ...prev, [name]: "" }));
   }
 
-  function validateStepFields() {
-    const currentControls = sellerRegisterFormControls.filter(
-      (control) => control.section === currentSection
-    );
-
+  // =========================
+  // VALIDASI
+  // =========================
+  function validateFields(fields) {
     const errors = {};
-    currentControls.forEach(({ name, label }) => {
+
+    fields.forEach((name) => {
+      const fieldDef = sellerProfileFormElements.find((f) => f.name === name);
       const value = formData[name]?.trim();
 
+      if (fieldDef?.required && !value) {
+        errors[name] = `${fieldDef.label} wajib diisi`;
+      }
+
       if (
-        !value &&
-        ![
-          "eWallet",
-          "eWalletsAccountOwner",
-          "eWalletAccountNumber",
-        ].includes(name)
+        name === "email" &&
+        value &&
+        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
       ) {
-        errors[name] = `${label} wajib diisi`;
-      } else {
-        if (name === "nik" && value && value.length !== 16) {
-          errors[name] = "NIK harus terdiri dari 16 digit";
-        }
-        if (
-          name === "email" &&
-          value &&
-          !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
-        ) {
-          errors[name] = "Format email tidak valid";
-        }
+        errors[name] = "Format email tidak valid";
       }
     });
 
+    return errors;
+  }
+
+  function validateCurrentStep() {
+    const errors = validateFields(sectionFields[currentSection]);
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   }
 
-  function handleNext() {
-    if (validateStepFields()) {
-      setStep((prev) => Math.min(prev + 1, sections.length - 1));
-    } else {
+  function validateAllSteps() {
+    let combinedErrors = {};
+
+    sections.forEach((section) => {
+      const errors = validateFields(sectionFields[section]);
+      combinedErrors = { ...combinedErrors, ...errors };
+    });
+
+    setFormErrors(combinedErrors);
+    return Object.keys(combinedErrors).length === 0;
+  }
+
+  // =========================
+  // NAVIGASI STEP
+  // =========================
+  function handleNext(e) {
+    e.preventDefault();
+
+    if (!validateCurrentStep()) {
       toast({
         title: "Lengkapi data terlebih dahulu",
-        description: "Beberapa isian belum valid atau belum diisi.",
+        description: "Beberapa field wajib belum diisi.",
         variant: "destructive",
       });
+      return;
     }
+
+    setStep((prev) => prev + 1);
   }
 
-  function handleBack() {
-    setStep((prev) => Math.max(prev - 1, 0));
-  }
-
-  async function onSubmit(e) {
+  function handleBack(e) {
     e.preventDefault();
-    if (!validateStepFields()) return;
+    setStep((prev) => prev - 1);
+  }
+
+  // =========================
+  // SUBMIT FINAL
+  // =========================
+  async function handleSubmit(e) {
+    e.preventDefault();
+
+    if (!isLastStep) return;
+
+    if (!validateAllSteps()) {
+      toast({
+        title: "Lengkapi semua data",
+        description: "Masih ada data yang belum valid.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!agreedToTerms) {
+      toast({
+        title: "Persetujuan diperlukan",
+        description: "Anda harus menyetujui syarat & ketentuan.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Hapus field kosong sebelum kirim ke backend
+    const cleanedData = Object.fromEntries(
+      Object.entries(formData).filter(([_, value]) => value.trim() !== "")
+    );
 
     setSubmitting(true);
+
     try {
-      const result = await dispatch(registerSeller(formData));
+      const result = await dispatch(
+        registerSeller({ ...cleanedData, agreedToTerms: true })
+      );
+
       if (result.payload?.success) {
-        toast({ title: result.payload.message });
+        toast({ title: "Pendaftaran berhasil, Silahkan Login" });
         navigate("/auth/login");
       } else {
         toast({
-          title: result.payload?.message || "Register gagal",
+          title: "Pendaftaran gagal",
+          description: result.payload?.message || "Terjadi kesalahan",
           variant: "destructive",
         });
       }
     } catch {
       toast({
-        title: "Terjadi kesalahan saat mendaftar",
+        title: "Terjadi kesalahan",
+        description: "Silakan coba kembali",
         variant: "destructive",
       });
     } finally {
@@ -119,28 +196,25 @@ export default function AuthRegisterSeller() {
     }
   }
 
+  // =========================
+  // RENDER
+  // =========================
   return (
     <div className="w-full max-w-3xl mx-auto px-4 py-8 space-y-10">
-      {/* Logo & Judul */}
+      {/* Header */}
       <div className="flex flex-col items-center text-center">
-        <div className="lg:hidden">
-          <img
-            src={logoWaleKreasi}
-            alt="Logo Wale Kreasi"
-            className="h-20 w-20 mb-3"
-          />
-        </div>
-        <h1 className="text-2xl font-bold text-gray-800 leading-snug">
-          Pendaftaran Seller <br className="sm:hidden" /> WaleKreasi
+        <img src={logoWaleKreasi} alt="Logo" className="h-20 w-20 mb-3" />
+        <h1 className="text-2xl font-bold text-gray-800">
+          Pendaftaran Seller WaleKreasi
         </h1>
       </div>
 
       {/* Step Indicator */}
-      <div className="flex justify-between gap-2 text-sm md:text-base mb-6 overflow-x-auto">
+      <div className="flex gap-2">
         {sections.map((section, index) => (
           <div
             key={section}
-            className={`flex-1 text-center border-b-2 pb-2 font-medium whitespace-nowrap ${
+            className={`flex-1 text-center border-b-2 pb-2 ${
               index === step
                 ? "border-primary text-primary"
                 : "border-gray-300 text-gray-400"
@@ -151,105 +225,49 @@ export default function AuthRegisterSeller() {
         ))}
       </div>
 
-      {/* Form */}
-      <form onSubmit={onSubmit} className="space-y-8">
-        <div className="grid grid-cols-1 gap-5">
-          {controlsToRender.map(
-            ({ name, label, placeholder, componentType, type, options }) => (
-              <div key={name}>
-                <label
-                  htmlFor={name}
-                  className="block mb-1 text-sm font-medium text-gray-700"
-                >
-                  {label}
-                </label>
+      <form onSubmit={handleSubmit} noValidate>
+        <div className="space-y-6">
+          {controlsToRender.map(({ name, label, type }) => (
+            <div key={name}>
+              <label className="block mb-1 text-sm font-medium">{label}</label>
 
-                {componentType === "input" ? (
-                  <>
-                    <input
-                      id={name}
-                      name={name}
-                      type={type || "text"}
-                      placeholder={placeholder}
-                      value={formData[name]}
-                      onChange={handleChange}
-                      className={`w-full rounded-md border px-3 py-2 text-sm transition focus:outline-none focus:ring-2 ${
-                        formErrors[name]
-                          ? "border-red-500 focus:ring-red-500"
-                          : "border-gray-300 focus:ring-primary focus:border-primary"
-                      }`}
-                    />
-                    {formErrors[name] && (
-                      <p className="mt-1 text-xs text-red-600">
-                        {formErrors[name]}
-                      </p>
-                    )}
-                  </>
-                ) : componentType === "textarea" ? (
-                  <>
-                    <textarea
-                      id={name}
-                      name={name}
-                      placeholder={placeholder}
-                      value={formData[name]}
-                      onChange={handleChange}
-                      className={`w-full rounded-md border px-3 py-2 text-sm resize-none min-h-[100px] transition focus:outline-none focus:ring-2 ${
-                        formErrors[name]
-                          ? "border-red-500 focus:ring-red-500"
-                          : "border-gray-300 focus:ring-primary focus:border-primary"
-                      }`}
-                    />
-                    {formErrors[name] && (
-                      <p className="mt-1 text-xs text-red-600">
-                        {formErrors[name]}
-                      </p>
-                    )}
-                  </>
-                ) : componentType === "select" ? ( // ✅ Tambahkan logika untuk dropdown/select
-                  <>
-                    <select
-                      id={name}
-                      name={name}
-                      value={formData[name]}
-                      onChange={handleChange}
-                      className={`w-full rounded-md border px-3 py-2 text-sm transition focus:outline-none focus:ring-2 ${
-                        formErrors[name]
-                          ? "border-red-500 focus:ring-red-500"
-                          : "border-gray-300 focus:ring-primary focus:border-primary"
-                      }`}
-                    >
-                      {/* Opsi default/placeholder, hanya ditampilkan jika belum dipilih dan bukan provinsi yang sudah ada defaultValue */}
-                      {!formData[name] && (
-                        <option value="" disabled>
-                          {placeholder || `Pilih ${label}`}
-                        </option>
-                      )}
-                      {options &&
-                        options.map((option) => (
-                          <option key={option.value} value={option.value}>
-                            {option.label}
-                          </option>
-                        ))}
-                    </select>
-                    {formErrors[name] && (
-                      <p className="mt-1 text-xs text-red-600">
-                        {formErrors[name]}
-                      </p>
-                    )}
-                  </>
-                ) : null}
-              </div>
-            )
-          )}
+              {type === "textarea" ? (
+                <textarea
+                  name={name}
+                  value={formData[name]}
+                  onChange={handleChange}
+                  className={`w-full border rounded-md p-2 ${
+                    formErrors[name] ? "border-red-500" : "border-gray-300"
+                  }`}
+                />
+              ) : (
+                <input
+                  name={name}
+                  type={type || "text"}
+                  value={formData[name]}
+                  onChange={handleChange}
+                  className={`w-full border rounded-md p-2 ${
+                    formErrors[name] ? "border-red-500" : "border-gray-300"
+                  }`}
+                />
+              )}
+
+              {formErrors[name] && (
+                <p className="text-xs text-red-600 mt-1">
+                  {formErrors[name]}
+                </p>
+              )}
+            </div>
+          ))}
         </div>
 
-        {/* Tombol Navigasi */}
-        <div className="flex justify-between pt-4">
+        {/* Action Buttons */}
+        <div className="flex justify-between pt-8">
           {step > 0 ? (
             <button
               type="button"
               onClick={handleBack}
-              className="px-4 py-2 border border-gray-300 rounded-md text-sm text-gray-700 hover:bg-gray-100 transition"
+              className="px-4 py-2 rounded-md border border-gray-300"
             >
               Kembali
             </button>
@@ -257,11 +275,11 @@ export default function AuthRegisterSeller() {
             <div />
           )}
 
-          {step < sections.length - 1 ? (
+          {!isLastStep ? (
             <button
               type="button"
               onClick={handleNext}
-              className="px-4 py-2 bg-primary text-white rounded-md text-sm hover:bg-primary/90 transition"
+              className="px-6 py-2 rounded-md bg-primary text-white"
             >
               Selanjutnya
             </button>
@@ -269,11 +287,7 @@ export default function AuthRegisterSeller() {
             <button
               type="submit"
               disabled={submitting}
-              className={`px-4 py-2 text-sm rounded-md transition ${
-                submitting
-                  ? "bg-primary/60 cursor-not-allowed"
-                  : "bg-primary hover:bg-primary/90 text-white"
-              }`}
+              className="px-6 py-2 rounded-md bg-primary text-white disabled:opacity-60"
             >
               {submitting ? "Memproses..." : "Daftar Seller"}
             </button>

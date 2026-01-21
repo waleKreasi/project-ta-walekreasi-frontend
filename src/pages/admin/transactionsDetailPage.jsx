@@ -93,7 +93,7 @@ function TransactionDetailPage() {
           variant="ghost"
           size="icon"
           onClick={handleBack}
-          className="text-gray-600 hover:text-gray-900"
+          className="text-gray-600 hover:text-white"
           >
           <ArrowLeft className="h-6 w-6" />
         </Button>

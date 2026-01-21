@@ -15,7 +15,7 @@ const api = axios.create({
 // ===============================
 const initialState = {
   isAuthenticated: false,
-  isLoading: true,
+  isLoading: false,
   user: null,
   error: null,
 };
@@ -24,18 +24,15 @@ const initialState = {
 // REGISTER CUSTOMER
 // ===============================
 export const registerUser = createAsyncThunk(
-  "/auth/register",
+  "auth/register",
   async (formData, { rejectWithValue }) => {
     try {
       const res = await api.post("/auth/register", formData);
-
-      if (!res.data.success) {
-        return rejectWithValue(res.data);
-      }
-
       return res.data;
     } catch (err) {
-      return rejectWithValue(err.response?.data || { message: "Gagal mendaftar" });
+      return rejectWithValue(
+        err.response?.data || { message: "Gagal mendaftar" }
+      );
     }
   }
 );
@@ -44,41 +41,39 @@ export const registerUser = createAsyncThunk(
 // REGISTER SELLER
 // ===============================
 export const registerSeller = createAsyncThunk(
-  "/auth/register-seller",
+  "auth/register-seller",
   async (formData, { rejectWithValue }) => {
     try {
       const res = await api.post("/auth/register-seller", formData);
-
-      if (!res.data.success) {
-        return rejectWithValue(res.data);
-      }
-
       return res.data;
     } catch (err) {
-      return rejectWithValue(err.response?.data || { message: "Gagal mendaftar seller" });
+      return rejectWithValue(
+        err.response?.data || { message: "Gagal mendaftar seller" }
+      );
     }
   }
 );
 
 // ===============================
-// LOGIN
+// LOGIN (EMAIL / PHONE)
 // ===============================
 export const loginUser = createAsyncThunk(
-  "/auth/login",
-  async (formData, { dispatch, rejectWithValue }) => {
+  "auth/login",
+  async ({ identifier, password }, { dispatch, rejectWithValue }) => {
     try {
-      const res = await api.post("/auth/login", formData);
+      const res = await api.post("/auth/login", {
+        identifier,
+        password,
+      });
 
-      if (!res.data.success) {
-        return rejectWithValue(res.data);
-      }
-
-      // Update session
+      // refresh auth state
       await dispatch(checkAuth());
 
       return res.data;
     } catch (err) {
-      return rejectWithValue(err.response?.data || { message: "Login gagal" });
+      return rejectWithValue(
+        err.response?.data || { message: "Login gagal" }
+      );
     }
   }
 );
@@ -87,23 +82,24 @@ export const loginUser = createAsyncThunk(
 // LOGOUT
 // ===============================
 export const logoutUser = createAsyncThunk(
-  "/auth/logout",
+  "auth/logout",
   async (_, { rejectWithValue }) => {
     try {
       const res = await api.post("/auth/logout");
-
       return res.data;
     } catch (err) {
-      return rejectWithValue(err.response?.data || { message: "Logout gagal" });
+      return rejectWithValue(
+        err.response?.data || { message: "Logout gagal" }
+      );
     }
   }
 );
 
 // ===============================
-// CHECK AUTH (CEK SESSION)
+// CHECK AUTH (SESSION)
 // ===============================
 export const checkAuth = createAsyncThunk(
-  "/auth/checkauth",
+  "auth/check-auth",
   async (_, { rejectWithValue }) => {
     try {
       const res = await api.get("/auth/check-auth", {
@@ -111,10 +107,11 @@ export const checkAuth = createAsyncThunk(
           "Cache-Control": "no-store, no-cache",
         },
       });
-
       return res.data;
     } catch (err) {
-      return rejectWithValue(err.response?.data || { message: "Session invalid" });
+      return rejectWithValue(
+        err.response?.data || { message: "Session tidak valid" }
+      );
     }
   }
 );
@@ -128,14 +125,16 @@ const authSlice = createSlice({
   reducers: {
     setUser: (state, action) => {
       state.user = action.payload;
-      state.isAuthenticated = !!action.payload;
+      state.isAuthenticated = Boolean(action.payload);
+    },
+    clearError: (state) => {
+      state.error = null;
     },
   },
   extraReducers: (builder) => {
     builder
-      // ==========================================
-      // REGISTER USER
-      // ==========================================
+
+      // ================= REGISTER USER =================
       .addCase(registerUser.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -148,9 +147,7 @@ const authSlice = createSlice({
         state.error = action.payload?.message;
       })
 
-      // ==========================================
-      // REGISTER SELLER
-      // ==========================================
+      // ================= REGISTER SELLER =================
       .addCase(registerSeller.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -163,9 +160,7 @@ const authSlice = createSlice({
         state.error = action.payload?.message;
       })
 
-      // ==========================================
-      // LOGIN
-      // ==========================================
+      // ================= LOGIN =================
       .addCase(loginUser.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -178,17 +173,16 @@ const authSlice = createSlice({
         state.error = action.payload?.message;
       })
 
-      // ==========================================
-      // CHECK AUTH
-      // ==========================================
+      // ================= CHECK AUTH =================
       .addCase(checkAuth.pending, (state) => {
         state.isLoading = true;
-        state.error = null;
       })
       .addCase(checkAuth.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.user = action.payload.success ? action.payload.user : null;
-        state.isAuthenticated = action.payload.success;
+        state.user = action.payload?.success
+          ? action.payload.user
+          : null;
+        state.isAuthenticated = !!action.payload?.success;
       })
       .addCase(checkAuth.rejected, (state) => {
         state.isLoading = false;
@@ -196,22 +190,13 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
       })
 
-      // ==========================================
-      // LOGOUT
-      // ==========================================
-      .addCase(logoutUser.pending, (state) => {
-        state.isLoading = true;
-      })
+      // ================= LOGOUT =================
       .addCase(logoutUser.fulfilled, (state) => {
-        state.isLoading = false;
         state.user = null;
         state.isAuthenticated = false;
-      })
-      .addCase(logoutUser.rejected, (state) => {
-        state.isLoading = false;
       });
   },
 });
 
-export const { setUser } = authSlice.actions;
+export const { setUser, clearError } = authSlice.actions;
 export default authSlice.reducer;
